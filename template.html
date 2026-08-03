@@ -109,7 +109,7 @@
   }
   .callout strong { color: var(--text); }
 
-  .club-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  .club-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
   table.clubs { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 720px; }
   table.clubs th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); font-weight: 700; padding: 10px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
   table.clubs td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -129,7 +129,8 @@
   .na { color: var(--text-faint); font-style: italic; font-size: 12px; }
 
   /* Heatmap */
-  .heatmap-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  .heatmap-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  .scroll-hint { display: none; font-size: 11px; color: var(--text-faint); margin: 6px 2px 0; }
   table.heatmap { border-collapse: collapse; font-size: 12.5px; min-width: 100%; }
   table.heatmap th { text-align: center; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; position: sticky; top: 0; background: var(--surface); }
   table.heatmap th.club-col-h { text-align: left; position: sticky; left: 0; z-index: 2; }
@@ -156,7 +157,9 @@
   .player-meta { flex: 1; min-width: 0; }
   .player-name { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .player-sub { font-size: 11.5px; color: var(--text-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .player-score { font-size: 14px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+  .player-score-wrap { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
+  .player-score { font-size: 14px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .player-score-raw { font-size: 10px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
 
   /* All-players filter bar */
   .filter-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
@@ -207,6 +210,53 @@
 
   footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-faint); line-height: 1.6; }
   footer code { background: var(--surface-raised); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 11px; }
+
+  /* ---- Mobile ---- */
+  @media (max-width: 720px) {
+    .wrap { padding: 24px 14px 56px; }
+    header.masthead { padding-bottom: 20px; margin-bottom: 24px; gap: 8px; }
+    .stat-strip { gap: 8px; }
+    .stat-chip { min-width: 0; flex: 1 1 calc(33.333% - 8px); padding: 8px 10px; }
+    .stat-chip .n { font-size: 16px; }
+    section.block { margin-top: 34px; }
+    h2 { font-size: 18px; }
+    .block-note { font-size: 12.5px; }
+
+    /* Bigger touch targets on tabs/buttons */
+    .tab-btn { padding: 9px 14px; font-size: 12.5px; }
+    .filter-reset { padding: 9px 14px; }
+
+    /* Filter bar: stack full-width instead of wrapping into a ragged grid */
+    .filter-row { flex-direction: column; align-items: stretch; }
+    .filter-input, .filter-select { width: 100% !important; }
+    .filter-num-group { display: flex; gap: 8px; }
+    .filter-num-group .filter-input { width: auto !important; flex: 1; }
+    .filter-count { margin-left: 0; order: 99; }
+
+    /* Wide tables: confirm horizontal scroll is the interaction, not a layout break */
+    table.clubs, table.heatmap { font-size: 12px; }
+    table.clubs th, table.clubs td { padding: 7px 10px; }
+    .scroll-hint { display: block; }
+
+    /* Player leaderboard cards: single column, roomier tap area */
+    .pos-grid { grid-template-columns: 1fr; }
+    .player-card { padding: 12px 14px; }
+
+    /* Transfer window: rating badge wraps under club name if needed */
+    .tw-head { flex-wrap: wrap; gap: 8px 12px; padding: 12px 14px; }
+    .tw-club { flex-basis: 100%; order: 1; }
+    .tw-rank { order: 0; }
+    .tw-rating { order: 2; }
+    .tw-chevron { order: 3; margin-left: auto; }
+    .tw-row { flex-wrap: wrap; row-gap: 4px; }
+    .tw-row .name { flex-basis: 100%; }
+
+    footer { font-size: 11.5px; }
+  }
+
+  @media (max-width: 400px) {
+    .stat-chip { flex-basis: calc(50% - 8px); }
+  }
 </style>
 </head>
 <body>
@@ -220,20 +270,23 @@
   </header>
 
   <section class="block">
-    <div class="block-head"><h2>Club core quality, 2024-25 → 2025-26</h2></div>
-    <p class="block-note">Every rated outfield player's z-scored composite, rolled up per club and weighted by minutes share. Positive delta means the squad that finished this season is, on paper, better than the one that started it — not that the club necessarily earned more points.</p>
+    <div class="block-head"><h2>Club core quality by season</h2></div>
+    <p class="block-note">Every rated outfield player's z-scored composite, rolled up per club and weighted by minutes share. Positive delta means the squad that finished this season is, on paper, better than the one that started it — not that the club necessarily earned more points. Pick a season below.</p>
+    <div class="tabs" id="seasonTabs"></div>
     <div class="club-table-wrap">
       <table class="clubs">
-        <thead><tr><th></th><th>Club</th><th>2024-25</th><th>2025-26</th><th>Δ Core quality</th><th>Added</th><th>Lost</th></tr></thead>
+        <thead id="clubTableHead"></thead>
         <tbody id="clubTableBody"></tbody>
       </table>
     </div>
+    <p class="scroll-hint">Swipe to see more columns →</p>
   </section>
 
   <section class="block">
     <div class="block-head"><h2>Club core quality — 10 season history</h2></div>
     <p class="block-note">Core quality per club, every season, 2016-17 through 2025-26 — not just the latest transition. Blue = above the season's average squad quality, red = below; blank means the club wasn't in the Premier League that season. Sorted by most recent available season.</p>
     <div class="heatmap-wrap"><table class="heatmap" id="heatmapTable"></table></div>
+    <p class="scroll-hint">Swipe to see more seasons →</p>
     <div class="heatmap-legend">
       <span>−1.0</span>
       <span class="ramp" id="heatmapRamp"></span>
@@ -243,14 +296,14 @@
 
   <section class="block">
     <div class="block-head"><h2>Player rankings by sub-position</h2></div>
-    <p class="block-note">2025-26 season, minimum 450 minutes played. Composite score is a weighted z-score across that sub-position's category set — see footer for what feeds each one.</p>
+    <p class="block-note">2025-26 season, minimum 450 minutes played. Ranked by composite score adjusted for sample size: a player with only a few games is pulled toward the average, so a hot cameo can't outrank a full season of sustained form on rate alone. The small "raw" figure is the unadjusted rate score. See footer for what feeds each category.</p>
     <div class="tabs" id="posTabs"></div>
     <div id="posGrids"></div>
   </section>
 
   <section class="block">
     <div class="block-head"><h2>All players — 2025-26</h2></div>
-    <p class="block-note">Every scored player this season (450+ minutes), filterable by club, sub-position, and age. Click a column header to sort.</p>
+    <p class="block-note">Every scored player this season (450+ minutes), filterable by club, sub-position, and age. Composite is sample-size-adjusted (see above) — click a column header to sort, including by "Composite (raw)" for the unadjusted rate.</p>
     <div class="filter-row">
       <input type="text" id="filterSearch" placeholder="Search player…" class="filter-input" />
       <select id="filterClub" class="filter-select"><option value="">All clubs</option></select>
@@ -265,8 +318,10 @@
         <option value="W">Winger</option>
         <option value="FW">Forward</option>
       </select>
-      <input type="number" id="filterAgeMin" placeholder="Age min" class="filter-input filter-num" />
-      <input type="number" id="filterAgeMax" placeholder="Age max" class="filter-input filter-num" />
+      <div class="filter-num-group">
+        <input type="number" id="filterAgeMin" placeholder="Age min" class="filter-input filter-num" />
+        <input type="number" id="filterAgeMax" placeholder="Age max" class="filter-input filter-num" />
+      </div>
       <button id="filterReset" class="filter-reset">Reset</button>
       <span class="filter-count" id="filterCount"></span>
     </div>
@@ -280,16 +335,18 @@
             <th data-sort="age">Age</th>
             <th data-sort="minutes">Minutes</th>
             <th data-sort="score">Composite</th>
+            <th data-sort="score_raw">Composite (raw)</th>
           </tr>
         </thead>
         <tbody id="allPlayersBody"></tbody>
       </table>
     </div>
+    <p class="scroll-hint">Swipe to see more columns →</p>
   </section>
 
   <section class="block">
     <div class="block-head"><h2>2026 summer transfer window</h2></div>
-    <p class="block-note">Rating = Σ(incoming rated composite) − Σ(outgoing rated composite), using each player's most recent Premier League season score. Click a club to see the in/out breakdown.</p>
+    <p class="block-note">Rating = Σ(incoming rated composite) − Σ(outgoing rated composite), using each player's most recent Premier League season score, sample-size adjusted (hover a score for the raw figure). Click a club to see the in/out breakdown.</p>
     <div class="callout"><strong>Read this carefully:</strong> a club can post a high rating largely by shedding underperforming players, not by signing well. This is an "addition by subtraction" number as much as a recruitment-quality one — always check the breakdown before trusting the headline figure. Grey chips are unrated: no Premier League history to score against (most new arrivals from other leagues, and academy departures).</div>
     <div class="transfer-list" id="transferList"></div>
   </section>
@@ -326,28 +383,51 @@
     `<div class="stat-chip"><span class="n">${s.n}</span><span class="l">${s.l}</span></div>`
   ).join('');
 
-  // Club delta table
-  const maxAbsDelta = Math.max(...data.clubs.map(c => c.delta === null ? 0 : Math.abs(c.delta)), 0.001);
-  const clubRows = data.clubs.map((c, i) => {
-    const deltaPct = c.delta === null ? 0 : Math.min(Math.abs(c.delta) / maxAbsDelta * 50, 50);
-    const barDir = c.delta === null ? '' : (c.delta >= 0 ? 'pos' : 'neg');
-    const deltaCell = c.delta === null
-      ? '<span class="na">no 2024-25 data</span>'
-      : `<div class="delta-cell">
-           <div class="delta-bar-track"><div class="mid"></div><div class="delta-bar-fill ${barDir}" style="width:${deltaPct}%;"></div></div>
-           <span class="num ${signClass(c.delta)}">${c.delta >= 0 ? '+' : ''}${fmtNum(c.delta)}</span>
-         </div>`;
-    return `<tr>
-      <td class="rank-num">${i + 1}</td>
-      <td class="club-name">${c.club}</td>
-      <td class="num muted">${c.from === null ? '<span class="na">—</span>' : fmtNum(c.from)}</td>
-      <td class="num">${fmtNum(c.to)}</td>
-      <td>${deltaCell}</td>
-      <td class="num ${signClass(c.added)}">${c.added === null ? '—' : (c.added >= 0 ? '+' : '') + fmtNum(c.added)}</td>
-      <td class="num ${signClass(c.lost !== null ? -c.lost : null)}">${c.lost === null ? '—' : (c.lost >= 0 ? '+' : '') + fmtNum(c.lost)}</td>
-    </tr>`;
-  }).join('');
-  document.getElementById('clubTableBody').innerHTML = clubRows;
+  // Club delta table -- one tab per season transition
+  const transitionSeasons = data.transition_seasons || [];
+  const priorSeason = {};
+  transitionSeasons.forEach((s, i) => {
+    const [startYear] = s.split('-');
+    priorSeason[s] = `${parseInt(startYear, 10) - 1}-${startYear.slice(2)}`;
+  });
+
+  function renderClubSeason(season) {
+    const rows = (data.club_transitions && data.club_transitions[season]) || [];
+    const maxAbsDelta = Math.max(...rows.map(c => c.delta === null ? 0 : Math.abs(c.delta)), 0.001);
+    document.getElementById('clubTableHead').innerHTML =
+      `<tr><th></th><th>Club</th><th>${priorSeason[season]}</th><th>${season}</th><th>Δ Core quality</th><th>Added</th><th>Lost</th></tr>`;
+    document.getElementById('clubTableBody').innerHTML = rows.map((c, i) => {
+      const deltaPct = c.delta === null ? 0 : Math.min(Math.abs(c.delta) / maxAbsDelta * 50, 50);
+      const barDir = c.delta === null ? '' : (c.delta >= 0 ? 'pos' : 'neg');
+      const deltaCell = c.delta === null
+        ? `<span class="na">no ${priorSeason[season]} data</span>`
+        : `<div class="delta-cell">
+             <div class="delta-bar-track"><div class="mid"></div><div class="delta-bar-fill ${barDir}" style="width:${deltaPct}%;"></div></div>
+             <span class="num ${signClass(c.delta)}">${c.delta >= 0 ? '+' : ''}${fmtNum(c.delta)}</span>
+           </div>`;
+      return `<tr>
+        <td class="rank-num">${i + 1}</td>
+        <td class="club-name">${c.club}</td>
+        <td class="num muted">${c.from === null ? '<span class="na">—</span>' : fmtNum(c.from)}</td>
+        <td class="num">${fmtNum(c.to)}</td>
+        <td>${deltaCell}</td>
+        <td class="num ${signClass(c.added)}">${c.added === null ? '—' : (c.added >= 0 ? '+' : '') + fmtNum(c.added)}</td>
+        <td class="num ${signClass(c.lost !== null ? -c.lost : null)}">${c.lost === null ? '—' : (c.lost >= 0 ? '+' : '') + fmtNum(c.lost)}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  document.getElementById('seasonTabs').innerHTML = transitionSeasons.map((s, i) =>
+    `<button class="tab-btn${i === transitionSeasons.length - 1 ? ' active' : ''}" data-season="${s}">${s}</button>`
+  ).join('');
+  document.querySelectorAll('#seasonTabs .tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#seasonTabs .tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderClubSeason(btn.dataset.season);
+    });
+  });
+  renderClubSeason(transitionSeasons[transitionSeasons.length - 1]);
 
   // Club history heatmap
   const hist = data.club_history;
@@ -398,7 +478,10 @@
            <div class="player-name">${p.player}</div>
            <div class="player-sub">${p.squad} · age ${p.age ?? '—'} · ${p.minutes.toLocaleString()}′</div>
          </div>
-         <span class="player-score">${p.score >= 0 ? '+' : ''}${fmtNum(p.score)}</span>
+         <div class="player-score-wrap">
+           <span class="player-score">${p.score >= 0 ? '+' : ''}${fmtNum(p.score)}</span>
+           <span class="player-score-raw">raw ${p.score_raw >= 0 ? '+' : ''}${fmtNum(p.score_raw)}</span>
+         </div>
        </div>`
     ).join('');
     return `<div class="pos-grid${i === 0 ? ' active' : ''}" data-sp="${sp}">${cards}</div>`;
@@ -461,6 +544,7 @@
         <td class="num">${p.age ?? '—'}</td>
         <td class="num">${p.minutes.toLocaleString()}</td>
         <td class="num ${signClass(p.score)}">${p.score >= 0 ? '+' : ''}${fmtNum(p.score)}</td>
+        <td class="num muted">${p.score_raw >= 0 ? '+' : ''}${fmtNum(p.score_raw)}</td>
       </tr>`).join('');
   }
 
@@ -500,7 +584,10 @@
   function scoreChip(t) {
     if (!t.rated) return '<span class="score-chip unrated">unrated</span>';
     const cls = t.score >= 0 ? 'pos' : 'neg';
-    return `<span class="score-chip ${cls}">${t.score >= 0 ? '+' : ''}${fmtNum(t.score)}</span>`;
+    const rawTitle = t.score_raw !== null && t.score_raw !== undefined
+      ? ` title="Sample-size adjusted. Raw (unadjusted) composite: ${t.score_raw >= 0 ? '+' : ''}${fmtNum(t.score_raw)}"`
+      : '';
+    return `<span class="score-chip ${cls}"${rawTitle}>${t.score >= 0 ? '+' : ''}${fmtNum(t.score)}</span>`;
   }
   function txRow(t) {
     return `<div class="tw-row">
