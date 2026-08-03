@@ -1,0 +1,528 @@
+<title>Core Quality — Premier League</title>
+<style>
+  @font-face {
+    font-family: 'Inter var local';
+    src: local('Inter'), local('Helvetica Neue'), local('Arial');
+  }
+
+  :root {
+    --bg: #f3f5f2;
+    --surface: #ffffff;
+    --surface-raised: #ffffff;
+    --border: #dde3dd;
+    --text: #131b16;
+    --text-muted: #5c6b60;
+    --text-faint: #8a988e;
+    --accent: #1f7a5c;
+    --accent-soft: #e3f1ea;
+    --accent-strong: #14523d;
+    --gold: #b8842e;
+    --gold-soft: #f6ecd9;
+    --pos: #1f7a5c;
+    --pos-soft: #e3f1ea;
+    --neg: #b3462c;
+    --neg-soft: #fbe9e3;
+    --cell-pos: #2a78d6;
+    --cell-neg: #e34948;
+    --cell-neutral: #f0efec;
+    --shadow: 0 1px 2px rgba(20, 30, 24, 0.06), 0 8px 24px -12px rgba(20, 30, 24, 0.12);
+    --radius: 10px;
+    color-scheme: light;
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0c1210;
+    --surface: #131b17;
+    --surface-raised: #17211c;
+    --border: #263229;
+    --text: #e9efe9;
+    --text-muted: #98a89d;
+    --text-faint: #63756a;
+    --accent: #4fb286;
+    --accent-soft: #17301f;
+    --accent-strong: #7ecca8;
+    --gold: #dcb15e;
+    --gold-soft: #2c2517;
+    --pos: #4fb286;
+    --pos-soft: #16301f;
+    --neg: #e08267;
+    --neg-soft: #341e17;
+    --cell-pos: #3987e5;
+    --cell-neg: #e66767;
+    --cell-neutral: #383835;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0c1210; --surface: #131b17; --surface-raised: #17211c; --border: #263229;
+      --text: #e9efe9; --text-muted: #98a89d; --text-faint: #63756a; --accent: #4fb286;
+      --accent-soft: #17301f; --accent-strong: #7ecca8; --gold: #dcb15e; --gold-soft: #2c2517;
+      --pos: #4fb286; --pos-soft: #16301f; --neg: #e08267; --neg-soft: #341e17;
+      --cell-pos: #3987e5; --cell-neg: #e66767; --cell-neutral: #383835;
+      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.5);
+      color-scheme: dark;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, 'Inter var local', 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  header.masthead {
+    display: flex; flex-direction: column; gap: 10px;
+    padding-bottom: 28px; margin-bottom: 28px; border-bottom: 1px solid var(--border);
+  }
+
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--accent); }
+  h1 { font-size: clamp(28px, 4vw, 38px); font-weight: 800; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+  .lede { font-size: 15px; color: var(--text-muted); max-width: 68ch; line-height: 1.55; margin: 0; }
+
+  .stat-strip { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .stat-chip { display: flex; flex-direction: column; gap: 2px; padding: 10px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); min-width: 108px; }
+  .stat-chip .n { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+  .stat-chip .l { font-size: 11px; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.05em; }
+
+  section.block { margin-top: 48px; }
+  .block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+  h2 { font-size: 21px; font-weight: 800; letter-spacing: -0.01em; margin: 0; }
+  .block-note { font-size: 13px; color: var(--text-muted); max-width: 62ch; line-height: 1.55; margin: 0 0 18px; }
+
+  .callout {
+    font-size: 13px; line-height: 1.6; color: var(--text-muted);
+    background: var(--gold-soft); border: 1px solid color-mix(in srgb, var(--gold) 30%, transparent);
+    border-radius: var(--radius); padding: 12px 16px; margin-bottom: 18px;
+  }
+  .callout strong { color: var(--text); }
+
+  .club-table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  table.clubs { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 720px; }
+  table.clubs th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); font-weight: 700; padding: 10px 14px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+  table.clubs td { padding: 9px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.clubs tr:last-child td { border-bottom: none; }
+  table.clubs tr:hover td { background: var(--accent-soft); }
+  .rank-num { color: var(--text-faint); font-size: 12px; width: 22px; }
+  .club-name { font-weight: 650; }
+  .delta-cell { display: flex; align-items: center; gap: 8px; min-width: 160px; }
+  .delta-bar-track { position: relative; width: 90px; height: 6px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .delta-bar-track .mid { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--text-faint); opacity: 0.5; }
+  .delta-bar-fill { position: absolute; top: 0; bottom: 0; border-radius: 4px; }
+  .delta-bar-fill.pos { background: var(--pos); left: 50%; }
+  .delta-bar-fill.neg { background: var(--neg); right: 50%; }
+  .num.pos { color: var(--pos); font-weight: 650; }
+  .num.neg { color: var(--neg); font-weight: 650; }
+  .num.muted { color: var(--text-faint); }
+  .na { color: var(--text-faint); font-style: italic; font-size: 12px; }
+
+  /* Heatmap */
+  .heatmap-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  table.heatmap { border-collapse: collapse; font-size: 12.5px; min-width: 100%; }
+  table.heatmap th { text-align: center; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-faint); font-weight: 700; padding: 8px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; position: sticky; top: 0; background: var(--surface); }
+  table.heatmap th.club-col-h { text-align: left; position: sticky; left: 0; z-index: 2; }
+  table.heatmap td { padding: 0; border-bottom: 1px solid var(--border); text-align: center; white-space: nowrap; }
+  table.heatmap td.club-col { text-align: left; font-weight: 650; padding: 8px 14px; position: sticky; left: 0; background: var(--surface); z-index: 1; border-right: 1px solid var(--border); }
+  table.heatmap td.cell { position: relative; min-width: 62px; }
+  table.heatmap td.cell .cell-inner { padding: 8px 6px; font-variant-numeric: tabular-nums; font-weight: 600; }
+  table.heatmap td.cell.empty .cell-inner { color: var(--text-faint); font-weight: 400; }
+  table.heatmap tr:last-child td { border-bottom: none; }
+  .heatmap-legend { display: flex; align-items: center; gap: 10px; font-size: 11.5px; color: var(--text-faint); margin-top: 10px; flex-wrap: wrap; }
+  .heatmap-legend .ramp { display: inline-flex; height: 10px; width: 140px; border-radius: 5px; overflow: hidden; }
+  .heatmap-legend .ramp span { flex: 1; }
+
+  /* Player rankings */
+  .tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .tab-btn { font-family: inherit; font-size: 13px; font-weight: 650; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s; }
+  .tab-btn:hover { border-color: var(--accent); color: var(--text); }
+  .tab-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .pos-grid { display: none; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+  .pos-grid.active { display: grid; }
+  .player-card { display: flex; align-items: center; gap: 12px; padding: 11px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  .player-rank { font-size: 15px; font-weight: 800; color: var(--text-faint); width: 20px; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+  .player-card:nth-child(1) .player-rank { color: var(--gold); }
+  .player-meta { flex: 1; min-width: 0; }
+  .player-name { font-size: 13.5px; font-weight: 650; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-sub { font-size: 11.5px; color: var(--text-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .player-score { font-size: 14px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+
+  /* All-players filter bar */
+  .filter-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 14px; }
+  .filter-input, .filter-select {
+    font-family: inherit; font-size: 13px; padding: 7px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+  }
+  .filter-input:focus, .filter-select:focus { outline: none; border-color: var(--accent); }
+  .filter-input.filter-num { width: 82px; }
+  #filterSearch { width: 180px; }
+  .filter-reset {
+    font-family: inherit; font-size: 12.5px; font-weight: 650; padding: 7px 14px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); cursor: pointer;
+  }
+  .filter-reset:hover { border-color: var(--accent); color: var(--text); }
+  .filter-count { font-size: 12px; color: var(--text-faint); margin-left: auto; white-space: nowrap; }
+  table.clubs th[data-sort] { cursor: pointer; user-select: none; }
+  table.clubs th[data-sort]:hover { color: var(--text); }
+  table.clubs th.sorted-asc::after { content: " ▲"; font-size: 9px; }
+  table.clubs th.sorted-desc::after { content: " ▼"; font-size: 9px; }
+
+  /* Transfer windows */
+  .transfer-list { display: flex; flex-direction: column; gap: 8px; }
+  .tw-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .tw-head { display: flex; align-items: center; gap: 14px; padding: 12px 16px; cursor: pointer; user-select: none; }
+  .tw-head:hover { background: var(--accent-soft); }
+  .tw-rank { font-size: 12px; color: var(--text-faint); width: 18px; font-variant-numeric: tabular-nums; }
+  .tw-club { font-weight: 700; font-size: 14.5px; flex: 1; }
+  .tw-rating { font-size: 14px; font-weight: 800; font-variant-numeric: tabular-nums; padding: 3px 10px; border-radius: 999px; }
+  .tw-rating.pos { color: var(--pos); background: var(--pos-soft); }
+  .tw-rating.neg { color: var(--neg); background: var(--neg-soft); }
+  .tw-chevron { color: var(--text-faint); font-size: 12px; transition: transform 0.15s; flex-shrink: 0; }
+  .tw-card.open .tw-chevron { transform: rotate(90deg); }
+  .tw-body { display: none; padding: 4px 16px 16px; border-top: 1px solid var(--border); }
+  .tw-card.open .tw-body { display: block; }
+  .tw-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 12px; }
+  @media (max-width: 640px) { .tw-columns { grid-template-columns: 1fr; } }
+  .tw-col-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); margin-bottom: 6px; }
+  .tw-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .tw-row:last-child { border-bottom: none; }
+  .tw-row .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tw-row .counterparty { color: var(--text-faint); font-size: 11.5px; white-space: nowrap; }
+  .tw-row .fee { color: var(--text-muted); font-size: 11.5px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .tw-row .score-chip { font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; padding: 1px 7px; border-radius: 999px; flex-shrink: 0; }
+  .tw-row .score-chip.pos { color: var(--pos); background: var(--pos-soft); }
+  .tw-row .score-chip.neg { color: var(--neg); background: var(--neg-soft); }
+  .tw-row .score-chip.unrated { color: var(--text-faint); background: var(--border); font-weight: 600; font-size: 11px; }
+
+  footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-faint); line-height: 1.6; }
+  footer code { background: var(--surface-raised); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 11px; }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">CQ_v1 · Premier League</div>
+    <h1>Core Quality Delta</h1>
+    <p class="lede">Squad-quality change, player rankings by sub-position, and this summer's transfer-window ratings — computed from FBref, FotMob, and Sofascore data across 10 seasons (2016-17 through 2025-26).</p>
+    <div class="stat-strip" id="statStrip"></div>
+  </header>
+
+  <section class="block">
+    <div class="block-head"><h2>Club core quality, 2024-25 → 2025-26</h2></div>
+    <p class="block-note">Every rated outfield player's z-scored composite, rolled up per club and weighted by minutes share. Positive delta means the squad that finished this season is, on paper, better than the one that started it — not that the club necessarily earned more points.</p>
+    <div class="club-table-wrap">
+      <table class="clubs">
+        <thead><tr><th></th><th>Club</th><th>2024-25</th><th>2025-26</th><th>Δ Core quality</th><th>Added</th><th>Lost</th></tr></thead>
+        <tbody id="clubTableBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>Club core quality — 10 season history</h2></div>
+    <p class="block-note">Core quality per club, every season, 2016-17 through 2025-26 — not just the latest transition. Blue = above the season's average squad quality, red = below; blank means the club wasn't in the Premier League that season. Sorted by most recent available season.</p>
+    <div class="heatmap-wrap"><table class="heatmap" id="heatmapTable"></table></div>
+    <div class="heatmap-legend">
+      <span>−1.0</span>
+      <span class="ramp" id="heatmapRamp"></span>
+      <span>+1.0 core quality</span>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>Player rankings by sub-position</h2></div>
+    <p class="block-note">2025-26 season, minimum 450 minutes played. Composite score is a weighted z-score across that sub-position's category set — see footer for what feeds each one.</p>
+    <div class="tabs" id="posTabs"></div>
+    <div id="posGrids"></div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>All players — 2025-26</h2></div>
+    <p class="block-note">Every scored player this season (450+ minutes), filterable by club, sub-position, and age. Click a column header to sort.</p>
+    <div class="filter-row">
+      <input type="text" id="filterSearch" placeholder="Search player…" class="filter-input" />
+      <select id="filterClub" class="filter-select"><option value="">All clubs</option></select>
+      <select id="filterPos" class="filter-select">
+        <option value="">All positions</option>
+        <option value="GK">Goalkeeper</option>
+        <option value="CB">Centre-back</option>
+        <option value="FB">Full-back</option>
+        <option value="DM">Defensive mid</option>
+        <option value="CM">Central mid</option>
+        <option value="AM">Attacking mid</option>
+        <option value="W">Winger</option>
+        <option value="FW">Forward</option>
+      </select>
+      <input type="number" id="filterAgeMin" placeholder="Age min" class="filter-input filter-num" />
+      <input type="number" id="filterAgeMax" placeholder="Age max" class="filter-input filter-num" />
+      <button id="filterReset" class="filter-reset">Reset</button>
+      <span class="filter-count" id="filterCount"></span>
+    </div>
+    <div class="club-table-wrap">
+      <table class="clubs" id="allPlayersTable">
+        <thead>
+          <tr>
+            <th data-sort="player">Player</th>
+            <th data-sort="squad">Club</th>
+            <th data-sort="sub_position">Pos</th>
+            <th data-sort="age">Age</th>
+            <th data-sort="minutes">Minutes</th>
+            <th data-sort="score">Composite</th>
+          </tr>
+        </thead>
+        <tbody id="allPlayersBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="block-head"><h2>2026 summer transfer window</h2></div>
+    <p class="block-note">Rating = Σ(incoming rated composite) − Σ(outgoing rated composite), using each player's most recent Premier League season score. Click a club to see the in/out breakdown.</p>
+    <div class="callout"><strong>Read this carefully:</strong> a club can post a high rating largely by shedding underperforming players, not by signing well. This is an "addition by subtraction" number as much as a recruitment-quality one — always check the breakdown before trusting the headline figure. Grey chips are unrated: no Premier League history to score against (most new arrivals from other leagues, and academy departures).</div>
+    <div class="transfer-list" id="transferList"></div>
+  </section>
+
+  <footer>
+    <p>Composite scores blend FBref (native columns still served: goals, assists, interceptions, shots, shots on target, save data), FotMob (the large majority of stats — xG/xA, tackles, duels, cards, crossing, and more), and Sofascore (key passes, successful-dribble volume, tackle win-rate, ground-duel split, chipped passes — third-priority fallback, ~98% coverage). Never imputed: a stat no source reports for a player is left out of that player's category, not guessed at league average.</p>
+    <p>Sub-positions (<code>GK</code> <code>CB</code> <code>FB</code> <code>DM</code> <code>CM</code> <code>AM</code> <code>W</code> <code>FW</code>) are derived from FotMob's own position-history data, not FBref's coarse GK/DF/MF/FW split. One known gap: the <code>FW</code> sub-position's <code>aerial</code> category is missing outright for ~88% of forward-seasons (only one stat feeds it, with sparse coverage) — most strikers here are effectively scored on finishing, creation, and progression only.</p>
+  </footer>
+</div>
+
+<script id="dashboard-data" type="application/json">__DASHBOARD_DATA__</script>
+<script>
+(function () {
+  const data = JSON.parse(document.getElementById('dashboard-data').textContent);
+
+  function fmtNum(v, digits) {
+    if (v === null || v === undefined) return null;
+    return v.toFixed(digits === undefined ? 2 : digits);
+  }
+  function signClass(v) {
+    if (v === null || v === undefined) return 'muted';
+    return v >= 0 ? 'pos' : 'neg';
+  }
+
+  const totalPlayers = Object.values(data.players).reduce((a, arr) => a + arr.length, 0);
+  const strip = [
+    { n: '10', l: 'Seasons' },
+    { n: '3', l: 'Data sources' },
+    { n: '46', l: 'Canonical stats' },
+    { n: '8', l: 'Sub-positions' },
+    { n: data.clubs.length.toString(), l: 'Clubs, 2025-26' },
+  ];
+  document.getElementById('statStrip').innerHTML = strip.map(s =>
+    `<div class="stat-chip"><span class="n">${s.n}</span><span class="l">${s.l}</span></div>`
+  ).join('');
+
+  // Club delta table
+  const maxAbsDelta = Math.max(...data.clubs.map(c => c.delta === null ? 0 : Math.abs(c.delta)), 0.001);
+  const clubRows = data.clubs.map((c, i) => {
+    const deltaPct = c.delta === null ? 0 : Math.min(Math.abs(c.delta) / maxAbsDelta * 50, 50);
+    const barDir = c.delta === null ? '' : (c.delta >= 0 ? 'pos' : 'neg');
+    const deltaCell = c.delta === null
+      ? '<span class="na">no 2024-25 data</span>'
+      : `<div class="delta-cell">
+           <div class="delta-bar-track"><div class="mid"></div><div class="delta-bar-fill ${barDir}" style="width:${deltaPct}%;"></div></div>
+           <span class="num ${signClass(c.delta)}">${c.delta >= 0 ? '+' : ''}${fmtNum(c.delta)}</span>
+         </div>`;
+    return `<tr>
+      <td class="rank-num">${i + 1}</td>
+      <td class="club-name">${c.club}</td>
+      <td class="num muted">${c.from === null ? '<span class="na">—</span>' : fmtNum(c.from)}</td>
+      <td class="num">${fmtNum(c.to)}</td>
+      <td>${deltaCell}</td>
+      <td class="num ${signClass(c.added)}">${c.added === null ? '—' : (c.added >= 0 ? '+' : '') + fmtNum(c.added)}</td>
+      <td class="num ${signClass(c.lost !== null ? -c.lost : null)}">${c.lost === null ? '—' : (c.lost >= 0 ? '+' : '') + fmtNum(c.lost)}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('clubTableBody').innerHTML = clubRows;
+
+  // Club history heatmap
+  const hist = data.club_history;
+  const DOMAIN = 1.1;
+  function cellStyle(v) {
+    if (v === null || v === undefined) return '';
+    const pct = Math.min(Math.abs(v) / DOMAIN, 1) * 100;
+    const varName = v >= 0 ? '--cell-pos' : '--cell-neg';
+    return `background-color: color-mix(in srgb, var(${varName}) ${pct.toFixed(0)}%, var(--cell-neutral));`;
+  }
+  function textColorFor(v) {
+    if (v === null) return '';
+    const intensity = Math.min(Math.abs(v) / DOMAIN, 1);
+    return intensity > 0.55 ? 'color:#fff;' : '';
+  }
+  const heatHead = `<tr><th class="club-col-h">Club</th>${hist.seasons.map(s => `<th>${s}</th>`).join('')}</tr>`;
+  const heatRows = hist.rows.map(row => {
+    const cells = row.values.map(v => {
+      if (v === null) return `<td class="cell empty"><div class="cell-inner">—</div></td>`;
+      return `<td class="cell" style="${cellStyle(v)}"><div class="cell-inner" style="${textColorFor(v)}">${v >= 0 ? '+' : ''}${v.toFixed(2)}</div></td>`;
+    }).join('');
+    return `<tr><td class="club-col">${row.club}</td>${cells}</tr>`;
+  }).join('');
+  document.getElementById('heatmapTable').innerHTML = heatHead + heatRows;
+
+  const rampStops = 10;
+  let rampHtml = '';
+  for (let i = 0; i < rampStops; i++) {
+    const t = i / (rampStops - 1);
+    const v = -1 + t * 2;
+    rampHtml += `<span style="${cellStyle(v)}"></span>`;
+  }
+  document.getElementById('heatmapRamp').innerHTML = rampHtml;
+
+  // Player rankings
+  const subposLabels = { GK: 'Goalkeeper', CB: 'Centre-back', FB: 'Full-back', DM: 'Defensive mid', CM: 'Central mid', AM: 'Attacking mid', W: 'Winger', FW: 'Forward' };
+  const subposOrder = ['GK', 'CB', 'FB', 'DM', 'CM', 'AM', 'W', 'FW'];
+
+  document.getElementById('posTabs').innerHTML = subposOrder.map((sp, i) =>
+    `<button class="tab-btn${i === 0 ? ' active' : ''}" data-sp="${sp}">${subposLabels[sp]}</button>`
+  ).join('');
+
+  document.getElementById('posGrids').innerHTML = subposOrder.map((sp, i) => {
+    const cards = (data.players[sp] || []).map((p, idx) =>
+      `<div class="player-card">
+         <span class="player-rank">${idx + 1}</span>
+         <div class="player-meta">
+           <div class="player-name">${p.player}</div>
+           <div class="player-sub">${p.squad} · age ${p.age ?? '—'} · ${p.minutes.toLocaleString()}′</div>
+         </div>
+         <span class="player-score">${p.score >= 0 ? '+' : ''}${fmtNum(p.score)}</span>
+       </div>`
+    ).join('');
+    return `<div class="pos-grid${i === 0 ? ' active' : ''}" data-sp="${sp}">${cards}</div>`;
+  }).join('');
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.pos-grid').forEach(g => g.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelector(`.pos-grid[data-sp="${btn.dataset.sp}"]`).classList.add('active');
+    });
+  });
+
+  // All players — filterable table
+  const allPlayers = data.players_all || [];
+  const clubSelect = document.getElementById('filterClub');
+  (data.clubs_list || []).forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c; opt.textContent = c;
+    clubSelect.appendChild(opt);
+  });
+
+  let sortKey = 'score';
+  let sortDir = 'desc';
+
+  function applyFiltersAndRender() {
+    const search = document.getElementById('filterSearch').value.trim().toLowerCase();
+    const club = document.getElementById('filterClub').value;
+    const pos = document.getElementById('filterPos').value;
+    const ageMin = parseFloat(document.getElementById('filterAgeMin').value);
+    const ageMax = parseFloat(document.getElementById('filterAgeMax').value);
+
+    let rows = allPlayers.filter(p => {
+      if (search && !p.player.toLowerCase().includes(search)) return false;
+      if (club && p.squad !== club) return false;
+      if (pos && p.sub_position !== pos) return false;
+      if (!isNaN(ageMin) && (p.age === null || p.age < ageMin)) return false;
+      if (!isNaN(ageMax) && (p.age === null || p.age > ageMax)) return false;
+      return true;
+    });
+
+    rows = rows.slice().sort((a, b) => {
+      let av = a[sortKey], bv = b[sortKey];
+      if (av === null) av = sortKey === 'age' ? -Infinity : (typeof bv === 'string' ? '' : -Infinity);
+      if (bv === null) bv = sortKey === 'age' ? -Infinity : (typeof av === 'string' ? '' : -Infinity);
+      if (typeof av === 'string') {
+        const cmp = av.localeCompare(bv);
+        return sortDir === 'asc' ? cmp : -cmp;
+      }
+      return sortDir === 'asc' ? av - bv : bv - av;
+    });
+
+    document.getElementById('filterCount').textContent = `${rows.length} of ${allPlayers.length} players`;
+    document.getElementById('allPlayersBody').innerHTML = rows.map(p => `
+      <tr>
+        <td class="club-name">${p.player}</td>
+        <td>${p.squad}</td>
+        <td class="num muted">${p.sub_position}</td>
+        <td class="num">${p.age ?? '—'}</td>
+        <td class="num">${p.minutes.toLocaleString()}</td>
+        <td class="num ${signClass(p.score)}">${p.score >= 0 ? '+' : ''}${fmtNum(p.score)}</td>
+      </tr>`).join('');
+  }
+
+  ['filterSearch', 'filterClub', 'filterPos', 'filterAgeMin', 'filterAgeMax'].forEach(id => {
+    document.getElementById(id).addEventListener('input', applyFiltersAndRender);
+  });
+  document.getElementById('filterReset').addEventListener('click', () => {
+    document.getElementById('filterSearch').value = '';
+    document.getElementById('filterClub').value = '';
+    document.getElementById('filterPos').value = '';
+    document.getElementById('filterAgeMin').value = '';
+    document.getElementById('filterAgeMax').value = '';
+    applyFiltersAndRender();
+  });
+  document.querySelectorAll('#allPlayersTable th[data-sort]').forEach(th => {
+    th.addEventListener('click', () => {
+      const key = th.dataset.sort;
+      if (sortKey === key) {
+        sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortKey = key;
+        sortDir = key === 'player' || key === 'squad' || key === 'sub_position' ? 'asc' : 'desc';
+      }
+      document.querySelectorAll('#allPlayersTable th[data-sort]').forEach(h => h.classList.remove('sorted-asc', 'sorted-desc'));
+      th.classList.add(sortDir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+      applyFiltersAndRender();
+    });
+  });
+  applyFiltersAndRender();
+
+  // Transfer windows
+  function fmtFee(fee, onLoan) {
+    if (onLoan) return 'Loan';
+    if (fee === null || fee === undefined) return 'Undisclosed';
+    return '£' + (fee / 1000000).toFixed(1) + 'm';
+  }
+  function scoreChip(t) {
+    if (!t.rated) return '<span class="score-chip unrated">unrated</span>';
+    const cls = t.score >= 0 ? 'pos' : 'neg';
+    return `<span class="score-chip ${cls}">${t.score >= 0 ? '+' : ''}${fmtNum(t.score)}</span>`;
+  }
+  function txRow(t) {
+    return `<div class="tw-row">
+      <span class="name">${t.player}${t.sub_position ? ' <span style="color:var(--text-faint);font-size:11px;">(' + t.sub_position + ')</span>' : ''}</span>
+      <span class="counterparty">${t.counterparty || ''}</span>
+      <span class="fee">${fmtFee(t.fee, t.on_loan)}</span>
+      ${scoreChip(t)}
+    </div>`;
+  }
+  document.getElementById('transferList').innerHTML = data.transfers.map((tw, i) => {
+    const ratingClass = tw.rating >= 0 ? 'pos' : 'neg';
+    return `<div class="tw-card" data-idx="${i}">
+      <div class="tw-head">
+        <span class="tw-rank">${i + 1}</span>
+        <span class="tw-club">${tw.club}</span>
+        <span class="tw-rating ${ratingClass}">${tw.rating >= 0 ? '+' : ''}${fmtNum(tw.rating)}</span>
+        <span class="tw-chevron">▸</span>
+      </div>
+      <div class="tw-body">
+        <div class="tw-columns">
+          <div><div class="tw-col-label">In (${tw.in.length})</div>${tw.in.map(txRow).join('') || '<div class="na">none</div>'}</div>
+          <div><div class="tw-col-label">Out (${tw.out.length})</div>${tw.out.map(txRow).join('') || '<div class="na">none</div>'}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.querySelectorAll('.tw-head').forEach(head => {
+    head.addEventListener('click', () => head.closest('.tw-card').classList.toggle('open'));
+  });
+})();
+</script>
