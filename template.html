@@ -304,7 +304,7 @@
 
   <section class="block">
     <div class="block-head"><h2>Club core quality by season</h2></div>
-    <p class="block-note">Every rated outfield player's z-scored composite, rolled up per club and weighted by minutes share. Positive delta means the squad that finished this season is, on paper, better than the one that started it — not that the club necessarily earned more points. Pick a season below, then <b>tap any club to see which players joined and left</b> the core squad, and what each was worth.</p>
+    <p class="block-note">Every player over the 450-minute floor, z-scored and rolled up per club weighted by minutes share — the <b>full squad</b>, not a top-N slice, so genuine depth counts. Positive delta means the squad that finished this season is, on paper, better than the one that started it — not that the club necessarily earned more points. Pick a season below, then <b>tap any club to see which players joined and left</b>. The <b>Top 14</b> column keeps the older narrower view for reference; it sums fewer players so it sits on a smaller scale — compare it only against other Top 14 figures.</p>
     <div class="tabs" id="seasonTabs"></div>
     <div class="club-table-wrap">
       <table class="clubs">
@@ -429,7 +429,7 @@
     const rows = (data.club_transitions && data.club_transitions[season]) || [];
     const maxAbsDelta = Math.max(...rows.map(c => c.delta === null ? 0 : Math.abs(c.delta)), 0.001);
     document.getElementById('clubTableHead').innerHTML =
-      `<tr><th></th><th>Club</th><th>${priorSeason[season]}</th><th>${season}</th><th>Δ Core quality</th><th>Added</th><th>Lost</th></tr>`;
+      `<tr><th></th><th>Club</th><th>${priorSeason[season]}</th><th>${season}</th><th>Δ Squad quality</th><th>Added</th><th>Lost</th><th title="Squad size: players over the 450-minute floor">Squad</th><th title="The narrower top-14-by-minutes view, on a different (smaller) scale than the full-squad figure.">Top 14</th></tr>`;
     document.getElementById('clubTableBody').innerHTML = rows.map((c, i) => {
       const deltaPct = c.delta === null ? 0 : Math.min(Math.abs(c.delta) / maxAbsDelta * 50, 50);
       const barDir = c.delta === null ? '' : (c.delta >= 0 ? 'pos' : 'neg');
@@ -449,7 +449,9 @@
         <td>${deltaCell}</td>
         <td class="num ${signClass(c.added)}">${c.added === null ? '—' : (c.added >= 0 ? '+' : '') + fmtNum(c.added)}</td>
         <td class="num ${signClass(c.lost !== null ? -c.lost : null)}">${c.lost === null ? '—' : (c.lost >= 0 ? '+' : '') + fmtNum(c.lost)}</td>
-      </tr>${expandable ? `<tr class="club-detail-row" data-detail="${encodeURIComponent(c.club)}"><td colspan="7">${moversPanel(changes, season)}</td></tr>` : ''}`;
+        <td class="num muted">${c.squad_size ?? '—'}</td>
+        <td class="num muted">${c.to_top_n === null || c.to_top_n === undefined ? '—' : fmtNum(c.to_top_n)}</td>
+      </tr>${expandable ? `<tr class="club-detail-row" data-detail="${encodeURIComponent(c.club)}"><td colspan="9">${moversPanel(changes, season)}</td></tr>` : ''}`;
     }).join('');
 
     // Click a club row to reveal the players behind its Added / Lost figures.
@@ -481,10 +483,10 @@
       ${list.length ? list.map(moverRow).join('') : `<div class="na">${emptyMsg}</div>`}
     </div>`;
     return `<div class="movers">
-      <p class="movers-note">Core-squad turnover: players in the ${season} core who weren't in the ${prior} core, and vice versa. <b>${ch.kept}</b> players were retained. The right-hand figure is each player's minutes-weighted contribution — these sum to the Added / Lost columns above.</p>
+      <p class="movers-note">Squad turnover: players in the ${season} squad (450+ minutes) who weren't in the ${prior} squad, and vice versa. <b>${ch.kept}</b> players were retained. The right-hand figure is each player's minutes-weighted contribution — these sum to the Added / Lost columns above.</p>
       <div class="mover-cols">
-        ${col('Joined the core squad', ch.added, 'no new core players')}
-        ${col('Left the core squad', ch.lost, 'no core players left')}
+        ${col('Joined the squad', ch.added, 'no new squad players')}
+        ${col('Left the squad', ch.lost, 'no squad players left')}
       </div>
     </div>`;
   }

@@ -77,6 +77,15 @@ def build(source: Path) -> dict:
 
     # ---- Clubs: every season transition, not just the latest ----
     t = pd.read_csv(data_dir / "transition/core_quality_delta.csv")
+    # core_quality is now the FULL squad (every player over the 450-minute
+    # floor). The old top-14 slice is retained as core_quality_top_n in the
+    # club layer -- joined on here so the dashboard can show both side by
+    # side. They are not on the same scale: the full-squad sum is larger by
+    # construction, since it sums more players.
+    club_layer = pd.read_csv(data_dir / "club/club_core_quality.csv")
+    top_n_lookup = club_layer.set_index(["season", "club"])["core_quality_top_n"].to_dict()
+    squad_size_lookup = club_layer.set_index(["season", "club"])["eligible_player_count"].to_dict()
+
     transition_seasons = sorted(t["season_to"].unique())
     club_transitions = {}
     for season_to in transition_seasons:
@@ -89,6 +98,8 @@ def build(source: Path) -> dict:
                 "delta": clean(round(float(r["core_quality_delta"]), 3)) if pd.notna(r["core_quality_delta"]) else None,
                 "added": clean(round(float(r["quality_added"]), 3)) if pd.notna(r["quality_added"]) else None,
                 "lost": clean(round(float(r["quality_lost"]), 3)) if pd.notna(r["quality_lost"]) else None,
+                "to_top_n": round(float(top_n_lookup[(season_to, r["club"])]), 3) if pd.notna(top_n_lookup.get((season_to, r["club"]))) else None,
+                "squad_size": clean(squad_size_lookup.get((season_to, r["club"]))),
             }
             for _, r in rows.iterrows()
         ]
