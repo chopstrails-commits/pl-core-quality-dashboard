@@ -33,6 +33,60 @@ def clean(v):
     return v
 
 
+SHRINKAGE_MINUTES = 900  # must match config.reliability_shrinkage_minutes
+
+
+def _combine_split_stints(frame: pd.DataFrame) -> pd.DataFrame:
+    """Merge a mid-season transfer's two club stints into one player-season.
+
+    The pipeline keys player rows on (player_id, season, squad), so a player
+    who moves mid-season correctly has one row per club -- that split is
+    what lets the club layer credit each club for the minutes actually played
+    for it, and is deliberately left alone there.
+
+    For a *player* ranking it's wrong twice over. It lists one human twice
+    (Marc Guehi appeared as both Crystal Palace and Manchester City, taking
+    two of eight leaderboard slots), and it double-penalises him: reliability
+    shrinkage is applied to each stint separately, so 3,150 minutes across two
+    clubs is treated as two thin samples rather than one full season.
+
+    Combining takes the minutes-weighted mean composite (both stints are
+    z-scored against the same season+sub_position pool, so they're on one
+    scale and averaging is valid) and re-applies shrinkage to the TOTAL
+    minutes. Note this moves scores in both directions -- Guehi gains (+0.18,
+    two good stints now trusted more) while Jorgen Strand Larsen drops (-0.51,
+    a poor rate over a full season is trusted more too). That is the intended
+    behaviour, not a bug.
+
+    Squad is joined with " / " rather than an arrow: player_quality.csv has no
+    transfer date, so the direction of the move can't be established from this
+    data and isn't invented. Clubs are ordered by minutes played, descending.
+    """
+    counts = frame.groupby("player_id")["squad"].transform("size")
+    single, split = frame[counts == 1].copy(), frame[counts > 1].copy()
+    if split.empty:
+        return frame
+
+    rows = []
+    for _, g in split.groupby("player_id", sort=False):
+        g = g.sort_values("minutes", ascending=False)
+        base = g.iloc[0].copy()  # richest stint supplies identity/sub_position
+        total = float(g["minutes"].sum())
+        weights = g["minutes"].where(g["composite_score"].notna())
+        weighted = (g["composite_score"] * weights).sum()
+        denom = weights.sum()
+        composite = weighted / denom if denom else float("nan")
+        base["minutes"] = int(total)
+        base["composite_score"] = composite
+        base["composite_score_reliable"] = composite * total / (total + SHRINKAGE_MINUTES)
+        base["squad"] = " / ".join(g["squad"].tolist())
+        base["split_stint"] = True
+        rows.append(base)
+
+    single["split_stint"] = False
+    return pd.concat([single, pd.DataFrame(rows)], ignore_index=True)
+
+
 def build(source: Path) -> dict:
     data_dir = source / "data"
     sys.path.insert(0, str(source / "src"))
@@ -47,6 +101,7 @@ def build(source: Path) -> dict:
     # alongside (score_raw) for transparency, not hidden.
     p = pd.read_csv(data_dir / "player/player_quality.csv")
     latest = p[(p["season"] == LATEST_SEASON) & (p["minutes"] >= 450)].copy()
+    latest = _combine_split_stints(latest)
     players_out = {}
     for sp in SUBPOS_ORDER:
         sub = latest[latest["sub_position"] == sp].sort_values("composite_score_reliable", ascending=False).head(8)
@@ -57,6 +112,7 @@ def build(source: Path) -> dict:
                 "minutes": int(r["minutes"]),
                 "score": round(float(r["composite_score_reliable"]), 3),
                 "score_raw": round(float(r["composite_score"]), 3),
+                "split_stint": bool(r.get("split_stint", False)),
             }
             for _, r in sub.iterrows()
         ]
@@ -70,10 +126,15 @@ def build(source: Path) -> dict:
             "minutes": int(r["minutes"]),
             "score": round(float(r["composite_score_reliable"]), 3),
             "score_raw": round(float(r["composite_score"]), 3),
+            "split_stint": bool(r.get("split_stint", False)),
         }
         for _, r in all_sorted.iterrows()
     ]
-    clubs_list = sorted(latest["squad"].unique().tolist())
+    # Built from the PRE-merge frame so the filter dropdown lists real clubs,
+    # not the combined "Crystal Palace / Manchester City" label a mid-season
+    # transfer carries. The front-end matches a combined squad by substring so
+    # such a player still appears under either of his clubs.
+    clubs_list = sorted(p[(p["season"] == LATEST_SEASON) & (p["minutes"] >= 450)]["squad"].unique().tolist())
 
     # ---- Clubs: every season transition, not just the latest ----
     t = pd.read_csv(data_dir / "transition/core_quality_delta.csv")
