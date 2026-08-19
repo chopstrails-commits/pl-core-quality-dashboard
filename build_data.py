@@ -94,6 +94,54 @@ def build(source: Path) -> dict:
         ]
     clubs_out = club_transitions[LATEST_SEASON]  # kept for back-compat / default view
 
+    # ---- Who actually moved: the players behind quality_added / quality_lost ----
+    # Mirrors transition.py's _added_lost exactly (a player is "added" if he's in
+    # this season's core squad and wasn't in last season's, and vice versa), so
+    # these lists sum back to the headline Added/Lost figures rather than being a
+    # loosely-related roster diff. Verified: Manchester Utd 2025-26 added sums to
+    # 0.123 against the transition layer's own 0.123.
+    core = pd.read_csv(data_dir / "club/core_players.csv")
+
+    def _fmt_movers(frame):
+        return [
+            {
+                "player": r["player"],
+                "sub_position": clean(r.get("sub_position")),
+                "minutes": int(r["minutes"]),
+                # 2 of 2,793 core rows have no composite (missing every stat in
+                # every category for that season). pandas' .sum() skips them, so
+                # the headline Added/Lost is unaffected -- surface them as null
+                # rather than dropping the player from the list entirely.
+                "contribution": None if pd.isna(r["quality_contribution"]) else round(float(r["quality_contribution"]), 3),
+                "score": None if pd.isna(r["composite_score_reliable"]) else round(float(r["composite_score_reliable"]), 2),
+            }
+            for _, r in frame.sort_values("quality_contribution", ascending=False, na_position="last").iterrows()
+        ]
+
+    squad_changes = {}
+    for season_to in transition_seasons:
+        rows = t[t["season_to"] == season_to]
+        season_from_vals = rows["season_from"].dropna()
+        if season_from_vals.empty:
+            continue
+        season_from = season_from_vals.iloc[0]
+        cur_all, prev_all = core[core["season"] == season_to], core[core["season"] == season_from]
+        per_club = {}
+        for club in rows["club"].unique():
+            cur = cur_all[cur_all["squad"] == club]
+            prev = prev_all[prev_all["squad"] == club]
+            # No prior-season core (promoted club) -> nothing meaningful to diff.
+            if prev.empty:
+                continue
+            added = cur[~cur["player_id"].isin(prev["player_id"])]
+            lost = prev[~prev["player_id"].isin(cur["player_id"])]
+            per_club[club] = {
+                "added": _fmt_movers(added),
+                "lost": _fmt_movers(lost),
+                "kept": int(len(cur) - len(added)),
+            }
+        squad_changes[season_to] = per_club
+
     # ---- Clubs: full season history ----
     c = pd.read_csv(data_dir / "club/club_core_quality.csv")
     seasons = sorted(c["season"].unique())
@@ -168,6 +216,7 @@ def build(source: Path) -> dict:
         "clubs_list": clubs_list,
         "clubs": clubs_out,
         "club_transitions": club_transitions,
+        "squad_changes": squad_changes,
         "transition_seasons": transition_seasons,
         "club_history": {"seasons": seasons, "rows": history_rows},
         "transfers": transfer_summary,

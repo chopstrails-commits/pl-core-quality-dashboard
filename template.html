@@ -128,6 +128,27 @@
   .num.muted { color: var(--text-faint); }
   .na { color: var(--text-faint); font-style: italic; font-size: 12px; }
 
+  /* Expandable club rows -> squad-turnover panel */
+  table.clubs tr.club-row.expandable { cursor: pointer; }
+  .row-chevron { display: inline-block; margin-right: 5px; transition: transform 0.15s; color: var(--text-faint); font-size: 10px; }
+  table.clubs tr.club-row.open .row-chevron { transform: rotate(90deg); }
+  table.clubs tr.club-row.open td { background: var(--accent-soft); }
+  table.clubs tr.club-detail-row { display: none; }
+  table.clubs tr.club-detail-row.open { display: table-row; }
+  table.clubs tr.club-detail-row > td { padding: 0; background: var(--surface-raised); }
+  table.clubs tr.club-detail-row:hover > td { background: var(--surface-raised); }
+  .movers { padding: 14px 16px 16px; }
+  .movers-note { font-size: 12px; color: var(--text-muted); margin: 0 0 12px; line-height: 1.5; white-space: normal; max-width: 90ch; }
+  .movers-note b { color: var(--text); }
+  .mover-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .mover-col-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-faint); margin-bottom: 6px; }
+  .mover { display: flex; align-items: center; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+  .mover:last-child { border-bottom: none; }
+  .mover-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-weight: 600; }
+  .mover-pos { color: var(--text-faint); font-weight: 400; font-size: 10.5px; }
+  .mover-min, .mover-score { color: var(--text-faint); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .mover-contrib { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; min-width: 52px; text-align: right; }
+
   /* Heatmap */
   .heatmap-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
   .scroll-hint { display: none; font-size: 11px; color: var(--text-faint); margin: 6px 2px 0; }
@@ -243,6 +264,13 @@
     table.clubs th, table.clubs td { padding: 7px 10px; }
     .scroll-hint { display: block; }
 
+    /* Squad-turnover panel: stack the two columns, and pin it to the viewport
+       width so the detail is readable without horizontal scrolling even though
+       its parent table is wider than the screen. */
+    .movers { padding: 12px 14px 14px; width: 100vw; max-width: calc(100vw - 30px); }
+    .mover-cols { grid-template-columns: 1fr; gap: 16px; }
+    .movers-note { font-size: 11.5px; }
+
     /* Player leaderboard cards: single column, roomier tap area */
     .pos-grid { grid-template-columns: 1fr; }
     .player-card { padding: 12px 14px; }
@@ -276,7 +304,7 @@
 
   <section class="block">
     <div class="block-head"><h2>Club core quality by season</h2></div>
-    <p class="block-note">Every rated outfield player's z-scored composite, rolled up per club and weighted by minutes share. Positive delta means the squad that finished this season is, on paper, better than the one that started it — not that the club necessarily earned more points. Pick a season below.</p>
+    <p class="block-note">Every rated outfield player's z-scored composite, rolled up per club and weighted by minutes share. Positive delta means the squad that finished this season is, on paper, better than the one that started it — not that the club necessarily earned more points. Pick a season below, then <b>tap any club to see which players joined and left</b> the core squad, and what each was worth.</p>
     <div class="tabs" id="seasonTabs"></div>
     <div class="club-table-wrap">
       <table class="clubs">
@@ -411,16 +439,54 @@
              <div class="delta-bar-track"><div class="mid"></div><div class="delta-bar-fill ${barDir}" style="width:${deltaPct}%;"></div></div>
              <span class="num ${signClass(c.delta)}">${c.delta >= 0 ? '+' : ''}${fmtNum(c.delta)}</span>
            </div>`;
-      return `<tr>
-        <td class="rank-num">${i + 1}</td>
+      const changes = (data.squad_changes && data.squad_changes[season] && data.squad_changes[season][c.club]) || null;
+      const expandable = !!changes && (changes.added.length || changes.lost.length);
+      return `<tr class="club-row${expandable ? ' expandable' : ''}" data-club="${encodeURIComponent(c.club)}">
+        <td class="rank-num">${expandable ? '<span class="row-chevron">▸</span>' : ''}${i + 1}</td>
         <td class="club-name">${c.club}</td>
         <td class="num muted">${c.from === null ? '<span class="na">—</span>' : fmtNum(c.from)}</td>
         <td class="num">${fmtNum(c.to)}</td>
         <td>${deltaCell}</td>
         <td class="num ${signClass(c.added)}">${c.added === null ? '—' : (c.added >= 0 ? '+' : '') + fmtNum(c.added)}</td>
         <td class="num ${signClass(c.lost !== null ? -c.lost : null)}">${c.lost === null ? '—' : (c.lost >= 0 ? '+' : '') + fmtNum(c.lost)}</td>
-      </tr>`;
+      </tr>${expandable ? `<tr class="club-detail-row" data-detail="${encodeURIComponent(c.club)}"><td colspan="7">${moversPanel(changes, season)}</td></tr>` : ''}`;
     }).join('');
+
+    // Click a club row to reveal the players behind its Added / Lost figures.
+    document.querySelectorAll('#clubTableBody tr.club-row.expandable').forEach(row => {
+      row.addEventListener('click', () => {
+        const detail = document.querySelector(`#clubTableBody tr.club-detail-row[data-detail="${row.dataset.club}"]`);
+        if (!detail) return;
+        const open = detail.classList.toggle('open');
+        row.classList.toggle('open', open);
+      });
+    });
+  }
+
+  // The squad-turnover panel: who joined the core squad, who left, and what
+  // each was worth. `contribution` is the same minutes-weighted figure the
+  // Added / Lost columns sum, so these lists reconcile with the headline.
+  function moverRow(m) {
+    return `<div class="mover">
+      <span class="mover-name">${m.player}${m.sub_position ? ` <span class="mover-pos">${m.sub_position}</span>` : ''}</span>
+      <span class="mover-min">${m.minutes.toLocaleString()}′</span>
+      <span class="mover-score" title="Player composite score (sample-size adjusted)">${m.score >= 0 ? '+' : ''}${fmtNum(m.score)}</span>
+      <span class="mover-contrib num ${signClass(m.contribution)}" title="Minutes-weighted contribution to this club's core quality — this is what the Added / Lost column sums.">${m.contribution >= 0 ? '+' : ''}${m.contribution.toFixed(3)}</span>
+    </div>`;
+  }
+  function moversPanel(ch, season) {
+    const prior = priorSeason[season];
+    const col = (label, list, emptyMsg) => `<div class="mover-col">
+      <div class="mover-col-label">${label} (${list.length})</div>
+      ${list.length ? list.map(moverRow).join('') : `<div class="na">${emptyMsg}</div>`}
+    </div>`;
+    return `<div class="movers">
+      <p class="movers-note">Core-squad turnover: players in the ${season} core who weren't in the ${prior} core, and vice versa. <b>${ch.kept}</b> players were retained. The right-hand figure is each player's minutes-weighted contribution — these sum to the Added / Lost columns above.</p>
+      <div class="mover-cols">
+        ${col('Joined the core squad', ch.added, 'no new core players')}
+        ${col('Left the core squad', ch.lost, 'no core players left')}
+      </div>
+    </div>`;
   }
 
   document.getElementById('seasonTabs').innerHTML = transitionSeasons.map((s, i) =>
