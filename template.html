@@ -207,6 +207,11 @@
   .tw-row .score-chip.pos { color: var(--pos); background: var(--pos-soft); }
   .tw-row .score-chip.neg { color: var(--neg); background: var(--neg-soft); }
   .tw-row .score-chip.unrated { color: var(--text-faint); background: var(--border); font-weight: 600; font-size: 11px; }
+  /* Projected (cross-league estimate) scores read as provisional: dashed
+     outline + transparent fill, so they never look like measured PL data. */
+  .tw-row .score-chip.projected { background: transparent; border: 1px dashed currentColor; font-weight: 650; }
+  .tw-row .from-league { color: var(--text-faint); font-size: 10.5px; font-style: italic; }
+  .tw-pl-only { font-size: 11px; color: var(--text-faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-faint); line-height: 1.6; }
   footer code { background: var(--surface-raised); border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font-size: 11px; }
@@ -346,8 +351,9 @@
 
   <section class="block">
     <div class="block-head"><h2>2026 summer transfer window</h2></div>
-    <p class="block-note">Rating = Σ(incoming rated composite) − Σ(outgoing rated composite), using each player's most recent Premier League season score, sample-size adjusted (hover a score for the raw figure). Click a club to see the in/out breakdown.</p>
-    <div class="callout"><strong>Read this carefully:</strong> a club can post a high rating largely by shedding underperforming players, not by signing well. This is an "addition by subtraction" number as much as a recruitment-quality one — always check the breakdown before trusting the headline figure. Grey chips are unrated: no Premier League history to score against (most new arrivals from other leagues, and academy departures).</div>
+    <p class="block-note">Rating = Σ(incoming) − Σ(outgoing), sample-size adjusted. Players with Premier League history use their real composite score. Signings from other leagues now carry a <b>projected estimate</b> instead of being skipped — shown with a dashed outline and a <b>≈</b> prefix. Hover any score for its basis. Click a club for the in/out breakdown.</p>
+    <div class="callout"><strong>Read this carefully:</strong> a club can post a high rating largely by shedding underperforming players, not by signing well — this is an "addition by subtraction" number as much as a recruitment-quality one, so check the breakdown before trusting the headline. Grey chips are still unrated: no Premier League history <em>and</em> no usable prior-league sample to project from.</div>
+    <div class="callout"><strong>About the ≈ projected scores.</strong> A signing from another league has no Premier League record to score, so their most recent substantial season elsewhere is run through the identical scoring pipeline and benchmarked against the current PL pool for their position. Two things to keep in mind. First, a flat <b>10% discount</b> is applied to every league except La Liga, on the assumption the Premier League is more competitive — that single flat rate is the weakest assumption here, and it almost certainly under-penalizes weaker leagues relative to stronger ones. Second, these are <em>estimates of translated ability, not measurements</em>; the "PL-only" figure beside a club's rating shows what the window looks like counting verified Premier League data alone.</div>
     <div class="transfer-list" id="transferList"></div>
   </section>
 
@@ -582,17 +588,28 @@
     return '£' + (fee / 1000000).toFixed(1) + 'm';
   }
   function scoreChip(t) {
-    if (!t.rated) return '<span class="score-chip unrated">unrated</span>';
+    const projected = t.rating_source === 'cross_league_estimate';
+    if (t.score === null || t.score === undefined) {
+      return '<span class="score-chip unrated" title="No Premier League history and no usable prior-league sample to project from.">unrated</span>';
+    }
     const cls = t.score >= 0 ? 'pos' : 'neg';
-    const rawTitle = t.score_raw !== null && t.score_raw !== undefined
-      ? ` title="Sample-size adjusted. Raw (unadjusted) composite: ${t.score_raw >= 0 ? '+' : ''}${fmtNum(t.score_raw)}"`
-      : '';
-    return `<span class="score-chip ${cls}"${rawTitle}>${t.score >= 0 ? '+' : ''}${fmtNum(t.score)}</span>`;
+    let title;
+    if (projected) {
+      title = `Projected estimate — no Premier League history. Based on ${t.from_minutes ? t.from_minutes.toLocaleString() + ' min in ' : ''}${t.from_league || 'a prior league'}${t.from_league === 'LaLiga' ? '' : ', with a 10% league-difficulty discount applied'}.`;
+    } else {
+      title = t.score_raw !== null && t.score_raw !== undefined
+        ? `Real Premier League data. Sample-size adjusted; raw composite: ${t.score_raw >= 0 ? '+' : ''}${fmtNum(t.score_raw)}`
+        : 'Real Premier League data.';
+    }
+    return `<span class="score-chip ${cls}${projected ? ' projected' : ''}" title="${title}">${projected ? '≈' : ''}${t.score >= 0 ? '+' : ''}${fmtNum(t.score)}</span>`;
   }
   function txRow(t) {
+    const projected = t.rating_source === 'cross_league_estimate';
+    const origin = projected && t.from_league
+      ? ` <span class="from-league">via ${t.from_league}</span>` : '';
     return `<div class="tw-row">
       <span class="name">${t.player}${t.sub_position ? ' <span style="color:var(--text-faint);font-size:11px;">(' + t.sub_position + ')</span>' : ''}</span>
-      <span class="counterparty">${t.counterparty || ''}</span>
+      <span class="counterparty">${t.counterparty || ''}${origin}</span>
       <span class="fee">${fmtFee(t.fee, t.on_loan)}</span>
       ${scoreChip(t)}
     </div>`;
@@ -604,6 +621,8 @@
         <span class="tw-rank">${i + 1}</span>
         <span class="tw-club">${tw.club}</span>
         <span class="tw-rating ${ratingClass}">${tw.rating >= 0 ? '+' : ''}${fmtNum(tw.rating)}</span>
+        ${tw.rating_pl_only !== null && tw.rating_pl_only !== undefined && Math.abs(tw.rating_pl_only - tw.rating) >= 0.005
+          ? `<span class="tw-pl-only" title="Rating counting only players with real Premier League history — i.e. before any cross-league projections are included.">PL-only ${tw.rating_pl_only >= 0 ? '+' : ''}${fmtNum(tw.rating_pl_only)}</span>` : ''}
         <span class="tw-chevron">▸</span>
       </div>
       <div class="tw-body">

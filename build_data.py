@@ -11,6 +11,8 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
+
 import pandas as pd
 
 DEFAULT_SOURCE = Path("/Users/bo/Desktop/Bo/PL Predictive Model")
@@ -111,8 +113,21 @@ def build(source: Path) -> dict:
     ]
 
     # ---- Transfer window ----
-    tw = pd.read_csv(data_dir / "exploratory/transfer_window.csv")
-    summary = summarize_by_club(tw).sort_values("rating", ascending=False)
+    # Uses the enriched file (transfer_window.csv + cross-league projections
+    # for signings with no Premier League history -- see cross_league.py).
+    # Falls back to the plain file if projections haven't been generated, so
+    # this never hard-fails on a fresh checkout.
+    enriched_path = data_dir / "exploratory/transfer_window_enriched.csv"
+    if enriched_path.exists():
+        tw = pd.read_csv(enriched_path)
+        from pl_predictive_model.cross_league import summarize_with_projections  # noqa: E402
+        summary = summarize_with_projections(tw).rename(columns={"rating_with_projections": "rating"})
+    else:
+        tw = pd.read_csv(data_dir / "exploratory/transfer_window.csv")
+        tw["rating_source"] = np.where(tw["rated"], "premier_league", "unrated")
+        tw["effective_rating"] = tw["composite_score_reliable"]
+        tw["rating_pl_data_only"] = np.nan
+        summary = summarize_by_club(tw).sort_values("rating", ascending=False)
 
     def fmt_side(df):
         rows = []
@@ -123,8 +138,13 @@ def build(source: Path) -> dict:
                 "fee": round(float(fee)) if fee is not None else None,
                 "on_loan": bool(x["on_loan"]) if pd.notna(x.get("on_loan")) else False,
                 "rated": bool(x["rated"]),
-                "score": None if pd.isna(x["composite_score_reliable"]) else round(float(x["composite_score_reliable"]), 3),
+                "rating_source": clean(x.get("rating_source")) or "unrated",
+                # `score` is what the club rating actually used: a real PL
+                # composite where we have one, else the cross-league estimate.
+                "score": None if pd.isna(x.get("effective_rating")) else round(float(x["effective_rating"]), 3),
                 "score_raw": None if pd.isna(x["composite_score"]) else round(float(x["composite_score"]), 3),
+                "from_league": clean(x.get("projected_from_league")),
+                "from_minutes": None if pd.isna(x.get("projected_from_minutes")) else int(x["projected_from_minutes"]),
                 "sub_position": clean(x.get("sub_position")),
             })
         return rows
@@ -133,10 +153,12 @@ def build(source: Path) -> dict:
     for _, r in summary.iterrows():
         club = r["club"]
         club_transfers = tw[tw["club"] == club]
-        inbound = club_transfers[club_transfers["direction"] == "in"].sort_values("composite_score_reliable", ascending=False, na_position="last")
-        outbound = club_transfers[club_transfers["direction"] == "out"].sort_values("composite_score_reliable", ascending=True, na_position="last")
+        inbound = club_transfers[club_transfers["direction"] == "in"].sort_values("effective_rating", ascending=False, na_position="last")
+        outbound = club_transfers[club_transfers["direction"] == "out"].sort_values("effective_rating", ascending=True, na_position="last")
         transfer_summary.append({
-            "club": club, "rating": round(float(r["rating"]), 3),
+            "club": club,
+            "rating": round(float(r["rating"]), 3),
+            "rating_pl_only": None if pd.isna(r.get("rating_pl_data_only")) else round(float(r["rating_pl_data_only"]), 3),
             "in": fmt_side(inbound), "out": fmt_side(outbound),
         })
 
