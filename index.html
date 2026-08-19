@@ -108,6 +108,13 @@
     border-radius: var(--radius); padding: 12px 16px; margin-bottom: 18px;
   }
   .callout strong { color: var(--text); }
+  details.callout-collapsible { padding: 0; }
+  details.callout-collapsible > summary { cursor: pointer; padding: 12px 16px; list-style: none; font-size: 13px; line-height: 1.5; }
+  details.callout-collapsible > summary::-webkit-details-marker { display: none; }
+  details.callout-collapsible > summary::after { content: " ▸"; color: var(--text-faint); font-size: 11px; }
+  details.callout-collapsible[open] > summary::after { content: " ▾"; }
+  details.callout-collapsible > summary:hover { color: var(--text); }
+  .callout-body { padding: 0 16px 12px; }
 
   .club-table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
   table.clubs { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 720px; }
@@ -298,9 +305,17 @@
   <header class="masthead">
     <div class="eyebrow">CQ_v1 · Premier League</div>
     <h1>Core Quality Delta</h1>
-    <p class="lede">Squad-quality change, player rankings by sub-position, and this summer's transfer-window ratings — computed from FBref, FotMob, and Sofascore data across 10 seasons (2016-17 through 2025-26).</p>
+    <p class="lede">This summer's transfer-window ratings, full-squad quality change by club, and player rankings by sub-position — computed from FBref, FotMob, and Sofascore data across 10 seasons (2016-17 through 2025-26).</p>
     <div class="stat-strip" id="statStrip"></div>
   </header>
+
+  <section class="block">
+    <div class="block-head"><h2>2026 summer transfer window</h2></div>
+    <p class="block-note">Rating = Σ(incoming) − Σ(outgoing), sample-size adjusted. Players with Premier League history use their real composite score. Signings from other leagues now carry a <b>projected estimate</b> instead of being skipped — shown with a dashed outline and a <b>≈</b> prefix. Hover any score for its basis. Click a club for the in/out breakdown.</p>
+    <div class="callout"><strong>Read this carefully:</strong> a club can post a high rating largely by shedding underperforming players, not by signing well — this is an "addition by subtraction" number as much as a recruitment-quality one, so check the breakdown before trusting the headline. Grey chips are still unrated: no Premier League history <em>and</em> no usable prior-league sample to project from.</div>
+    <details class="callout callout-collapsible"><summary><strong>About the ≈ projected scores</strong> — how cross-league estimates work, and their weakest assumption</summary><div class="callout-body"> A signing from another league has no Premier League record to score, so their most recent substantial season elsewhere is run through the identical scoring pipeline and benchmarked against the current PL pool for their position. Two things to keep in mind. First, a flat <b>10% discount</b> is applied to every league except La Liga, on the assumption the Premier League is more competitive — that single flat rate is the weakest assumption here, and it almost certainly under-penalizes weaker leagues relative to stronger ones. Second, these are <em>estimates of translated ability, not measurements</em>; the "PL-only" figure beside a club's rating shows what the window looks like counting verified Premier League data alone.</div></details>
+    <div class="transfer-list" id="transferList"></div>
+  </section>
 
   <section class="block">
     <div class="block-head"><h2>Club core quality by season</h2></div>
@@ -377,13 +392,6 @@
     <p class="scroll-hint">Swipe to see more columns →</p>
   </section>
 
-  <section class="block">
-    <div class="block-head"><h2>2026 summer transfer window</h2></div>
-    <p class="block-note">Rating = Σ(incoming) − Σ(outgoing), sample-size adjusted. Players with Premier League history use their real composite score. Signings from other leagues now carry a <b>projected estimate</b> instead of being skipped — shown with a dashed outline and a <b>≈</b> prefix. Hover any score for its basis. Click a club for the in/out breakdown.</p>
-    <div class="callout"><strong>Read this carefully:</strong> a club can post a high rating largely by shedding underperforming players, not by signing well — this is an "addition by subtraction" number as much as a recruitment-quality one, so check the breakdown before trusting the headline. Grey chips are still unrated: no Premier League history <em>and</em> no usable prior-league sample to project from.</div>
-    <div class="callout"><strong>About the ≈ projected scores.</strong> A signing from another league has no Premier League record to score, so their most recent substantial season elsewhere is run through the identical scoring pipeline and benchmarked against the current PL pool for their position. Two things to keep in mind. First, a flat <b>10% discount</b> is applied to every league except La Liga, on the assumption the Premier League is more competitive — that single flat rate is the weakest assumption here, and it almost certainly under-penalizes weaker leagues relative to stronger ones. Second, these are <em>estimates of translated ability, not measurements</em>; the "PL-only" figure beside a club's rating shows what the window looks like counting verified Premier League data alone.</div>
-    <div class="transfer-list" id="transferList"></div>
-  </section>
 
   <footer>
     <p>Composite scores blend FBref (native columns still served: goals, assists, interceptions, shots, shots on target, save data), FotMob (the large majority of stats — xG/xA, tackles, duels, cards, crossing, and more), and Sofascore (key passes, successful-dribble volume, tackle win-rate, ground-duel split, chipped passes — third-priority fallback, ~98% coverage). Never imputed: a stat no source reports for a player is left out of that player's category, not guessed at league average.</p>
