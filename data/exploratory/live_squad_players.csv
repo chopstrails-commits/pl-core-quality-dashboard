@@ -1,0 +1,424 @@
+squad,player,sub_position,rating,source
+Arsenal,Christos Tzolis,,2.467660213919456,cross_league_estimate
+Arsenal,Bukayo Saka,W,2.016871583048566,retained
+Arsenal,Martin Ødegaard,CM,1.3489740668746937,retained
+Arsenal,Declan Rice,DM,1.182344020665395,retained
+Arsenal,David Raya,GK,0.8033335441115773,retained
+Arsenal,Gabriel Magalhães,CB,0.7262766454173272,retained
+Arsenal,Mikel Merino,CM,0.4199094716890394,retained
+Arsenal,Kai Havertz,FW,0.3823465843047421,retained
+Arsenal,Noni Madueke,W,0.3793603690480384,retained
+Arsenal,Gabriel Martinelli,W,0.3147831934148063,retained
+Arsenal,William Saliba,CB,0.2032301524693643,retained
+Arsenal,Viktor Gyökeres,FW,0.1634607039953818,retained
+Arsenal,Ben White,FB,0.1587484202920599,retained
+Arsenal,Riccardo Calafiori,FB,0.0975134917617982,retained
+Arsenal,Eberechi Eze,AM,0.0641763713540518,retained
+Arsenal,Jurriën Timber,FB,-0.1936737628736763,retained
+Arsenal,Myles Lewis-Skelly,FB,-0.2197034590327258,retained
+Arsenal,Martín Zubimendi,CM,-0.2913142695424766,retained
+Arsenal,Piero Hincapié,FB,-0.3926101465943004,retained
+Arsenal,Piero Hincapié,FB,-0.4063782040333595,premier_league
+Arsenal,Cristhian Mosquera,CB,-0.6025097792570968,retained
+Arsenal,Illan Meslier,GK,-1.0333780667031909,premier_league
+Aston Villa,Emiliano Martínez,GK,1.3806438727360009,retained
+Aston Villa,Lucas Digne,FB,1.0394620775319972,retained
+Aston Villa,Douglas Luiz,DM,0.5377180611123554,retained
+Aston Villa,Johan Manzambi,,0.5239888516871071,cross_league_estimate
+Aston Villa,Boubacar Kamara,DM,0.4927681058440012,retained
+Aston Villa,Marco Bizot,GK,0.4297142778122503,retained
+Aston Villa,Ollie Watkins,FW,0.3235235178758253,retained
+Aston Villa,Donyell Malen,FW,0.3037178348953085,retained
+Aston Villa,Pau Torres,CB,0.2385964247462125,retained
+Aston Villa,John McGinn,W,0.1559009931187235,retained
+Aston Villa,Emi Buendía,W,0.0972910712443969,retained
+Aston Villa,Leon Bailey,W,0.0939957884135676,retained
+Aston Villa,Ian Maatsen,FB,0.0871037341890217,retained
+Aston Villa,Alejandro Garnacho,W,0.0485252473560542,premier_league
+Aston Villa,Amadou Onana,DM,-0.0949129821617867,retained
+Aston Villa,Tyrone Mings,CB,-0.2042789111038763,retained
+Aston Villa,Ross Barkley,AM,-0.2125269793138466,retained
+Aston Villa,Ezri Konsa,CB,-0.3305322111407416,retained
+Aston Villa,Matty Cash,FB,-0.3642674448812058,retained
+Aston Villa,Victor Lindelöf,CB,-0.4591849342964815,retained
+Aston Villa,Evann Guessand,W,-0.4788138440743519,retained
+Aston Villa,João Gomes,CM,-0.5691507833631957,premier_league
+Aston Villa,Lamare Bogarde,DM,-0.8089243012504048,retained
+Bournemouth,Rayan,AM,1.0401724734963465,retained
+Bournemouth,Álvaro Rodriguez,,0.9519495663409944,cross_league_estimate
+Bournemouth,David Brooks,W,0.8197194445181498,retained
+Bournemouth,António Silva,,0.5641060996704987,cross_league_estimate
+Bournemouth,James Hill,CB,0.5249853766558128,retained
+Bournemouth,Juanlu Sánchez,,0.4907157868631235,cross_league_estimate
+Bournemouth,Alex Scott,DM,0.4114425957517559,retained
+Bournemouth,Ryan Christie,DM,0.3161674362956729,retained
+Bournemouth,Marcus Tavernier,AM,0.2836658277297519,retained
+Bournemouth,Adrien Truffert,FB,0.2228432998214714,retained
+Bournemouth,Eli Junior Kroupi,AM,0.1582817740079561,retained
+Bournemouth,Lewis Cook,DM,0.1126180207793297,retained
+Bournemouth,Đorđe Petrović,GK,-0.0627250341066996,retained
+Bournemouth,Bafodé Diakité,CB,-0.1169015779441411,retained
+Bournemouth,Justin Kluivert,AM,-0.1548013581233342,retained
+Bournemouth,Evanilson,FW,-0.2810686524164624,retained
+Bournemouth,Amine Adli,W,-0.4787815054046798,retained
+Bournemouth,Tyler Adams,DM,-0.7518815688493359,retained
+Bournemouth,Adam Smith,FB,-1.0162245175013744,retained
+Brentford,Jannik Schuster,,1.6399167941388828,cross_league_estimate
+Brentford,Mamadou Sangaré,,1.3181598199528173,cross_league_estimate
+Brentford,Sepp van den Berg,CB,0.5675668563160086,retained
+Brentford,Mathias Jensen,DM,0.5490213958836225,retained
+Brentford,Caoimhín Kelleher,GK,0.4235431495140382,retained
+Brentford,Igor Thiago,FW,0.4217513888459442,retained
+Brentford,Vitaly Janelt,DM,0.395485143536279,retained
+Brentford,Michael Kayode,FB,0.3601940747518461,retained
+Brentford,Callum Wilson,FW,0.3493320962766245,premier_league
+Brentford,Dango Ouattara,W,0.1005384084042265,retained
+Brentford,Mikkel Damsgaard,AM,0.0391601481808053,retained
+Brentford,Aaron Hickey,FB,0.0211346559860418,retained
+Brentford,Nathan Collins,CB,-0.0879551311581106,retained
+Brentford,Keane Lewis-Potter,FB,-0.0949477623695368,retained
+Brentford,Kevin Schade,W,-0.3609484482400449,retained
+Brentford,Kristoffer Ajer,CB,-0.4325355609023759,retained
+Brentford,Rico Henry,FB,-0.5222485532007201,retained
+Brentford,Jaidon Anthony,W,-0.6287339311167851,premier_league
+Brentford,Yehor Yarmoliuk,DM,-0.656334726578747,retained
+Brentford,Aidan Stokes,,-1.4121892248465029,cross_league_estimate
+Brighton,Luka Vuskovic,,1.637288548913797,cross_league_estimate
+Brighton,Costinha,,1.1407597485311285,cross_league_estimate
+Brighton,Maxim De Cuyper,FB,1.0489170512103985,retained
+Brighton,Michael Svoboda,,0.9631001075446748,cross_league_estimate
+Brighton,Pascal Groß,DM,0.826358425262726,retained
+Brighton,Bart Verbruggen,GK,0.8167577097373024,retained
+Brighton,Olivier Boscagli,CB,0.5252219122518417,retained
+Brighton,Zadok Yohanna,,0.4693770694203684,cross_league_estimate
+Brighton,Yankuba Minteh,W,0.4084523977825171,retained
+Brighton,Lewis Dunk,CB,0.2699713204377116,retained
+Brighton,Brajan Gruda,W,0.1713113157600984,retained
+Brighton,Ferdi Kadioglu,FB,-0.0978889921870616,retained
+Brighton,Yasin Ayari,DM,-0.1120920820421291,retained
+Brighton,Mats Wieffer,FB,-0.1340635845069125,retained
+Brighton,Georginio Rutter,AM,-0.1376006606067548,retained
+Brighton,Kaoru Mitoma,W,-0.1541827273471362,retained
+Brighton,Pascal Struijk,CB,-0.2462312723425209,premier_league
+Brighton,Carlos Baleba,DM,-0.4421920665885887,retained
+Brighton,James Milner,DM,-0.4825847770416954,retained
+Brighton,Jack Hinshelwood,AM,-0.6984315093986251,retained
+Brighton,Diego Gómez,AM,-0.7156892152019644,retained
+Brighton,Rodrigo Rêgo,,,unrated
+Burnley,Hjalmar Ekdal,CB,0.2413145309645583,retained
+Burnley,Ugo Raghouber,,0.2404559456087737,cross_league_estimate
+Burnley,James Ward-Prowse,DM,0.1855607281777218,retained
+Burnley,Zian Flemming,FW,0.1633072622775504,retained
+Burnley,Josh Cullen,CM,0.0115640541198193,retained
+Burnley,Marcus Edwards,W,-0.0654823636968943,retained
+Burnley,Hannibal Mejbri,AM,-0.1217008584438315,retained
+Burnley,Joe Worrall,CB,-0.2012586828389901,retained
+Burnley,Ben Amos,,-0.377093027183622,cross_league_estimate
+Burnley,Armando Broja,FW,-0.5304734769790013,retained
+Burnley,Lucas,CM,-0.5759332717824596,retained
+Burnley,Jacob Bruun Larsen,W,-0.5835353960058877,retained
+Burnley,Florentino,CM,-0.8644781939240072,premier_league
+Burnley,Bashir Humphreys,CB,-0.9041940153693504,retained
+Burnley,Axel Tuanzebe,CB,-0.93371542221272,retained
+Burnley,Lyle Foster,FW,-1.0031839874844526,retained
+Burnley,Kyle Walker,FB,-1.0092699521412318,retained
+Burnley,Josh Laurent,CB,-1.9175456391057897,retained
+Burnley,Lluc Castell,,,unrated
+Chelsea,Reece James,FB,1.701632443295396,retained
+Chelsea,Valentín Barco,,1.0242233923764454,cross_league_estimate
+Chelsea,Estêvão Willian,W,0.8388353317852796,retained
+Chelsea,Emanuel Emegha,,0.8249064898286319,cross_league_estimate
+Chelsea,João Pedro,FW,0.7009759991780613,retained
+Chelsea,Tosin Adarabioyo,CB,0.6235004495702557,retained
+Chelsea,Robert Sánchez,GK,0.6026095235133924,retained
+Chelsea,Enzo Fernández,AM,0.4771947054539317,retained
+Chelsea,Pedro Neto,W,0.4433224095314252,retained
+Chelsea,Wesley Fofana,CB,0.4282716502617701,retained
+Chelsea,Cole Palmer,AM,0.4049138744044295,retained
+Chelsea,Moisés Caicedo,DM,0.2941884679875821,retained
+Chelsea,Danny Welbeck,FW,0.2572200258875039,premier_league
+Chelsea,Trevoh Chalobah,CB,0.25297216322072,retained
+Chelsea,Jorrel Hato,FB,0.2405204537559732,retained
+Chelsea,Geovany Quenda,,0.2384864933925797,cross_league_estimate
+Chelsea,Jamie Gittens,W,0.1228232980398641,retained
+Chelsea,Joshua Acheampong,CB,0.1085418451469822,retained
+Chelsea,Marco Palestra,,0.0885478753063654,cross_league_estimate
+Chelsea,Maxence Lacroix,CB,0.0799429867069344,premier_league
+Chelsea,Jordan Henderson,DM,-0.1651470841152359,premier_league
+Chelsea,Benoît Badiashile,CB,-0.1990837659371438,retained
+Chelsea,Morgan Rogers,AM,-0.2184652995080954,premier_league
+Chelsea,Liam Delap,FW,-0.2923963600929365,retained
+Chelsea,Malo Gusto,FB,-0.5672927699807426,retained
+Crystal Palace,Óscar Mingueza,,0.4557380233216505,cross_league_estimate
+Crystal Palace,Adam Wharton,DM,0.4218702510360727,retained
+Crystal Palace,Jean-Philippe Mateta,FW,0.3020930172897002,retained
+Crystal Palace,Jaydee Canvot,CB,0.2805343445008784,retained
+Crystal Palace,Yéremy Pino,AM,0.0757706716633848,retained
+Crystal Palace,Chris Richards,CB,-0.1540812430922969,retained
+Crystal Palace,Will Hughes,DM,-0.1562577303725022,retained
+Crystal Palace,Ismaila Sarr,AM,-0.1730319900789562,retained
+Crystal Palace,Dean Henderson,GK,-0.1770690809410227,retained
+Crystal Palace,Daniel Muñoz,FB,-0.3953312155212027,retained
+Crystal Palace,Jefferson Lerma,DM,-0.4063027196222296,retained
+Crystal Palace,Tyrick Mitchell,FB,-0.4082915658915791,retained
+Crystal Palace,Takehiro Tomiyasu,CB,-0.4796177862646866,premier_league
+Crystal Palace,Chadi Riad,CB,-0.4909024340255827,retained
+Crystal Palace,Jørgen Strand Larsen,FW,-0.6849211950982733,retained
+Crystal Palace,Justin Devenny,AM,-0.6927323800097366,retained
+Crystal Palace,Brennan Johnson,W,-0.7191345899762817,retained
+Crystal Palace,Nathaniel Clyne,FB,-0.8804125103556341,retained
+Everton,James Tarkowski,CB,1.109035222739132,retained
+Everton,Jordan Pickford,GK,0.8051436739839507,retained
+Everton,James Garner,DM,0.6271892019525949,retained
+Everton,Hayden Hackney,,0.616527504198796,cross_league_estimate
+Everton,Jarrad Branthwaite,CB,0.5899260565445987,retained
+Everton,Jack Grealish,W,0.4251059308643388,retained
+Everton,Beto,FW,0.41162519836082,retained
+Everton,Michael Keane,CB,0.4005008366586655,retained
+Everton,Jake O'Brien,FB,0.2500597149926201,retained
+Everton,Christian Nørgaard,DM,0.1911470001968474,premier_league
+Everton,Vitaliy Mykolenko,FB,-0.0234168160143298,retained
+Everton,Tim Iroegbunam,DM,-0.1530936702717824,retained
+Everton,Harrison Armstrong,CM,-0.17272009694509,retained
+Everton,Kiernan Dewsbury-Hall,AM,-0.2244164778521729,retained
+Everton,Carlos Alcaraz,AM,-0.3665093913300838,retained
+Everton,Thierno Barry,FW,-0.4864235023818752,retained
+Everton,Merlin Röhl,,-0.5242072031197343,cross_league_estimate
+Everton,Iliman Ndiaye,W,-0.6629852005994021,retained
+Everton,Dwight McNeil,W,-0.6854321017474726,retained
+Everton,Merlin Röhl,W,-0.7436404170602335,retained
+Fulham,Kenny Tete,FB,1.0629074450638614,retained
+Fulham,Joachim Andersen,CB,0.5872720327844388,retained
+Fulham,Alex Iwobi,DM,0.4963313923363688,retained
+Fulham,Timothy Castagne,FB,0.48341783571712,retained
+Fulham,Samuel Chukwueze,W,0.3345653723360572,retained
+Fulham,Gonzalo García,,0.3036544281046657,cross_league_estimate
+Fulham,Kevin,CB,0.3027871823963417,retained
+Fulham,Tom Cairney,DM,0.2870601834318804,retained
+Fulham,Jonah Kusi-Asare,,0.2845968522620021,cross_league_estimate
+Fulham,Antonee Robinson,FB,0.2583508183348513,retained
+Fulham,Bernd Leno,GK,0.1086388895790764,retained
+Fulham,Oscar Bobb,W,-0.0433839096466634,retained
+Fulham,Jorge Cuenca,CB,-0.1674766592413822,retained
+Fulham,Calvin Bassey,CB,-0.2239555579703446,retained
+Fulham,Rodrigo Muniz,FW,-0.2252546634782925,retained
+Fulham,Saša Lukić,DM,-0.2746763153048139,retained
+Fulham,Joshua King,AM,-0.35385783692145,retained
+Fulham,Sander Berge,DM,-0.4617664322066036,retained
+Fulham,Emile Smith Rowe,AM,-0.8085288065520977,retained
+Fulham,Ryan Sessegnon,FB,-1.2728111922845418,retained
+Fulham,César Palacios,,,unrated
+Leeds United,Anton Stach,CM,0.997730245465466,retained
+Leeds United,Harry Wilson,W,0.8228795597483416,premier_league
+Leeds United,Lukas Nmecha,FW,0.5564267641381522,retained
+Leeds United,Dominic Calvert-Lewin,FW,0.3727144188487789,retained
+Leeds United,Sean Longstaff,CM,0.3488004019712686,retained
+Leeds United,Tarik Muharemovic,,0.3175808278221823,cross_league_estimate
+Leeds United,Noah Okafor,W,0.0761306723868263,retained
+Leeds United,Jaka Bijol,CB,-0.0553282637524917,retained
+Leeds United,Ethan Ampadu,CM,-0.1393127388230809,retained
+Leeds United,Daniel James,W,-0.1457448456531238,retained
+Leeds United,James Justin,CB,-0.2216814188443405,retained
+Leeds United,Gabriel Gudmundsson,FB,-0.3527420622684312,retained
+Leeds United,Brenden Aaronson,W,-0.3992866902671869,retained
+Leeds United,Ilia Gruev,CM,-0.4654561890706203,retained
+Leeds United,Ao Tanaka,DM,-0.5014114120252887,retained
+Leeds United,Wilfried Gnonto,W,-0.5200539698833959,retained
+Leeds United,Jayden Bogle,FB,-0.52860676586959,retained
+Leeds United,James Trafford,GK,-0.7168522672115497,premier_league
+Leeds United,Joe Rodon,CB,-0.7455730062509012,retained
+Leeds United,Lucas Perri,GK,-1.363503717745936,retained
+Liverpool,Virgil van Dijk,CB,1.7383591105579914,retained
+Liverpool,Curtis Jones,DM,1.0763299604631402,retained
+Liverpool,Rio Ngumoha,W,1.0502857950040752,retained
+Liverpool,Hugo Ekitike,FW,0.7380375647900982,retained
+Liverpool,Florian Wirtz,W,0.410241217055671,retained
+Liverpool,Víctor Muñoz,,0.2969992289121104,cross_league_estimate
+Liverpool,Jeremie Frimpong,FB,0.2602248939187622,retained
+Liverpool,Cody Gakpo,W,0.211393792276417,retained
+Liverpool,Alisson,GK,0.1776294677414722,retained
+Liverpool,Ryan Gravenberch,DM,0.1379888355582233,retained
+Liverpool,Milos Kerkez,FB,0.0255654669479184,retained
+Liverpool,Dominik Szoboszlai,AM,0.0016428917374113,retained
+Liverpool,Conor Bradley,FB,-0.2501818992003815,retained
+Liverpool,Alexander Isak,FW,-0.3228594438544692,retained
+Liverpool,Giorgi Mamardashvili,GK,-0.3969866649867889,retained
+Liverpool,Alexis Mac Allister,DM,-0.4817734176606559,retained
+Liverpool,Joe Gomez,CB,-0.8764574622892328,retained
+Manchester City,Rayan Cherki,AM,2.182148694649025,retained
+Manchester City,Erling Haaland,FW,1.7902425231598944,retained
+Manchester City,Elliot Anderson,DM,1.5812379178692029,premier_league
+Manchester City,Rodri,DM,1.533022948842777,retained
+Manchester City,Jeremy Doku,W,1.5178105003210631,retained
+Manchester City,Gianluigi Donnarumma,GK,1.2721876323033607,retained
+Manchester City,Matheus Nunes,FB,1.1913062792814548,retained
+Manchester City,Mathys Detourbet,,0.9197510809381508,cross_league_estimate
+Manchester City,Phil Foden,AM,0.919506187660872,retained
+Manchester City,Marc Guéhi,CB,0.908223731642466,retained
+Manchester City,Nicolás González,DM,0.6969628140372345,retained
+Manchester City,Rayan Aït-Nouri,FB,0.6846919240399091,retained
+Manchester City,Rúben Dias,CB,0.4952080781799398,retained
+Manchester City,Joško Gvardiol,CB,0.4050912432801762,retained
+Manchester City,Abdukodir Khusanov,CB,0.3572694613826279,retained
+Manchester City,Omar Marmoush,FW,0.2775268546305022,retained
+Manchester City,Sávio,W,0.1782739019038393,retained
+Manchester City,Nico O'Reilly,FB,-0.0574886788724227,retained
+Manchester City,Tijjani Reijnders,AM,-0.0917743814828631,retained
+Manchester City,Antoine Semenyo,W,-0.1577206650354812,retained
+Manchester City,Pierce Charles,,-0.1821566656058964,cross_league_estimate
+Manchester City,Jeremy Monga,,-0.5817398401488271,cross_league_estimate
+Manchester City,Bernardo Silva,AM,-0.6686525033231501,retained
+Manchester Utd,Bruno Fernandes,AM,1.8765809323666376,retained
+Manchester Utd,Youri Tielemans,DM,1.2214690420753742,premier_league
+Manchester Utd,Diogo Dalot,FB,0.9765913716071836,retained
+Manchester Utd,Benjamin Šeško,FW,0.9412838600222,retained
+Manchester Utd,Harry Maguire,CB,0.8386529082577507,retained
+Manchester Utd,Noussair Mazraoui,FB,0.7882513270586099,retained
+Manchester Utd,Patrick Dorgu,FB,0.6760831139712187,retained
+Manchester Utd,Joshua Zirkzee,FW,0.5291589460003965,retained
+Manchester Utd,Bryan Mbeumo,AM,0.4498648354562868,retained
+Manchester Utd,Kobbie Mainoo,DM,0.3942959252852985,retained
+Manchester Utd,Lisandro Martínez,CB,0.3829038680445243,retained
+Manchester Utd,Karl Darlow,GK,0.356066943000213,premier_league
+Manchester Utd,Ayden Heaven,CB,0.3515058334203599,retained
+Manchester Utd,Matthijs de Ligt,CB,0.3412525003946481,retained
+Manchester Utd,Senne Lammens,GK,0.2348630743974227,retained
+Manchester Utd,Matheus Cunha,FW,0.1695349542973278,retained
+Manchester Utd,Amad Diallo,W,0.1557199755622377,retained
+Manchester Utd,Leny Yoro,CB,-0.1023379667106814,retained
+Manchester Utd,Luke Shaw,FB,-0.2821792528213775,retained
+Manchester Utd,Andrey Santos,DM,-0.320569020242138,premier_league
+Manchester Utd,Manuel Ugarte,DM,-0.3702934382276917,retained
+Manchester Utd,Mason Mount,AM,-0.3965513800171145,retained
+Manchester Utd,Cristian Orozco,,,unrated
+Newcastle,Bruno Guimarães,CM,1.8248958131912003,retained
+Newcastle,Sven Botman,CB,1.1706421445840054,retained
+Newcastle,Malick Thiaw,CB,1.1152886144529324,retained
+Newcastle,Aladji Bamba,,0.908634381996176,cross_league_estimate
+Newcastle,Bazoumana Touré,,0.812618390064114,cross_league_estimate
+Newcastle,Lewis Hall,FB,0.8117127684155926,retained
+Newcastle,Fabian Schär,CB,0.7866918037734738,retained
+Newcastle,Anthony Gordon,W,0.5497272741832364,retained
+Newcastle,Tino Livramento,FB,0.4198224583445843,retained
+Newcastle,Lewis Miley,CM,0.4001332003763406,retained
+Newcastle,William Osula,FW,0.2562006551155092,retained
+Newcastle,Nick Pope,GK,0.232488374920785,retained
+Newcastle,Harvey Barnes,W,0.1451904347523772,retained
+Newcastle,Jacob Murphy,W,0.1365712487146648,retained
+Newcastle,Lukás Hornícek,,0.0531834408446199,cross_league_estimate
+Newcastle,Jacob Ramsey,CM,0.0335539678784271,retained
+Newcastle,Yoane Wissa,FW,-0.0046738417446955,retained
+Newcastle,Joe Willock,CM,-0.0588465127377825,retained
+Newcastle,Joelinton,CM,-0.2850628139025231,retained
+Newcastle,Nick Woltemade,FW,-0.2907305601861904,retained
+Newcastle,Dan Burn,CB,-0.4209986311349397,retained
+Newcastle,Sean Steur,,-0.4524169962977962,cross_league_estimate
+Newcastle,Aaron Ramsdale,GK,-0.5287297753494011,retained
+Newcastle,Anthony Elanga,W,-0.7411382986473547,retained
+Newcastle,Ewen Jaouen,,-1.020572111931194,cross_league_estimate
+Nottingham,Taiwo Awoniyi,FW,0.614169966255317,retained
+Nottingham,Omari Hutchinson,W,0.4269828345380488,retained
+Nottingham,Nikola Milenković,CB,0.4176142097023108,retained
+Nottingham,Morgan Gibbs-White,AM,0.3594586817957902,retained
+Nottingham,Ola Aina,FB,0.1868586472649883,retained
+Nottingham,Xaver Schlager,,0.1263869633886925,cross_league_estimate
+Nottingham,Neco Williams,FB,0.1110228372373653,retained
+Nottingham,Morato,CB,0.0379372941545902,retained
+Nottingham,Matz Sels,GK,0.0340471162487003,retained
+Nottingham,Dilane Bakwa,W,0.0280367022158461,retained
+Nottingham,Murillo,CB,0.0028973707301244,retained
+Nottingham,Chris Wood,FW,-0.0394094676767049,retained
+Nottingham,Igor Jesus,FW,-0.1310831614260532,retained
+Nottingham,Callum Hudson-Odoi,W,-0.1564884204460214,retained
+Nottingham,Ryan Yates,DM,-0.2175605117317946,retained
+Nottingham,Nicolás Domínguez,DM,-0.2743568773923319,retained
+Nottingham,Gustavo Sá,,-0.2790841749862445,cross_league_estimate
+Nottingham,Ibrahim Sangaré,DM,-0.42396459841009,retained
+Nottingham,Nicolò Savona,FB,-0.4781313796049156,retained
+Nottingham,Jair Cunha,CB,-0.6724010956224153,retained
+Nottingham,Dan Ndoye,W,-0.6733790632566887,retained
+Sunderland,Granit Xhaka,DM,1.2469778168228538,retained
+Sunderland,Robin Roefs,GK,0.5464381633502109,retained
+Sunderland,Daniel Ballard,CB,0.1482226593921052,retained
+Sunderland,Nordi Mukiele,CB,0.0959081784389804,retained
+Sunderland,Omar Alderete,CB,0.0765418655327018,retained
+Sunderland,Thomas Meunier,,-0.0689337017091406,cross_league_estimate
+Sunderland,Wilson Isidor,FW,-0.1125665978973426,retained
+Sunderland,Chris Rigg,W,-0.261851832921959,retained
+Sunderland,Trai Hume,FB,-0.3485116393189379,retained
+Sunderland,Reinildo Mandava,FB,-0.4166363503518824,retained
+Sunderland,Lutsharel Geertruida,FB,-0.448399213941498,retained
+Sunderland,Habib Diarra,CM,-0.6696049409375693,retained
+Sunderland,Brian Brobbey,FW,-0.6831613266167414,retained
+Sunderland,Enzo Le Fée,AM,-0.6866684445287516,retained
+Sunderland,Luke O'Nien,CB,-0.7322963488037353,retained
+Sunderland,Noah Sadiki,CM,-0.7563149535212522,retained
+Sunderland,Simon Adingra,W,-0.8217918826774077,retained
+Sunderland,Chemsdine Talbi,W,-1.0245033805695716,retained
+Tottenham,Pedro Porro,FB,1.1244243636587696,retained
+Tottenham,Richarlison,FW,0.7100856554404316,retained
+Tottenham,Mathys Tel,W,0.6581913906297754,retained
+Tottenham,Jan Paul van Hecke,CB,0.5918010448768927,premier_league
+Tottenham,Mateus Fernandes,CM,0.5282954144119567,premier_league
+Tottenham,Sandro Tonali,CM,0.3888728980565666,premier_league
+Tottenham,Andrew Robertson,FB,0.3534605486019703,premier_league
+Tottenham,Xavi Simons,AM,0.288631705503477,retained
+Tottenham,Cristian Romero,CB,0.2434512558416688,retained
+Tottenham,Mohammed Kudus,W,0.2240783486796338,retained
+Tottenham,Kevin Danso,CB,0.1838674987657994,retained
+Tottenham,Wilson Odobert,W,0.1096973725508889,retained
+Tottenham,Conor Gallagher,CM,0.0923793521738098,retained
+Tottenham,Marcos Senesi,CB,-0.0609045740945161,premier_league
+Tottenham,Rodrigo Bentancur,DM,-0.1731307814930802,retained
+Tottenham,Lucas Bergvall,CM,-0.1903880495168471,retained
+Tottenham,Djed Spence,FB,-0.2163708220243329,retained
+Tottenham,Antonín Kinský,GK,-0.3400311457430867,retained
+Tottenham,Dominic Solanke,FW,-0.4422192907621248,retained
+Tottenham,Guglielmo Vicario,GK,-0.4462488199328613,retained
+Tottenham,João Palhinha,DM,-0.5684553778736388,retained
+Tottenham,Martin Dúbravka,GK,-0.683190618782629,premier_league
+Tottenham,Destiny Udogie,FB,-0.909491670516424,retained
+Tottenham,Archie Gray,DM,-0.95227118656333,retained
+Tottenham,Randal Kolo Muani,FW,-1.1554698972374915,retained
+Tottenham,Micky van de Ven,CB,-1.1763457316889474,retained
+Tottenham,Pape Matar Sarr,CB,-1.2685883861375595,retained
+West Ham,Konstantinos Mavropanos,CB,0.8310351789625443,retained
+West Ham,El Hadji Malick Diouf,FB,0.3610064484723507,retained
+West Ham,Valentín Castellanos,FW,0.3512915432530301,retained
+West Ham,Aaron Wan-Bissaka,FB,0.3037868527696408,retained
+West Ham,Jarrod Bowen,W,-0.1050041304333106,retained
+West Ham,Axel Disasi,CB,-0.1113392615567391,retained
+West Ham,Joël Veltman,FB,-0.1537542490377839,premier_league
+West Ham,Mads Hermansen,GK,-0.2539917594489689,retained
+West Ham,Lucas Paquetá,AM,-0.3405470218929601,retained
+West Ham,Soungoutou Magassa,DM,-0.4232157986274484,retained
+West Ham,Oliver Scarles,FB,-0.4361533057153199,retained
+West Ham,Alphonse Areola,GK,-0.6276619486845814,retained
+West Ham,Max Kilman,CB,-0.6425736547497808,retained
+West Ham,Kyle Walker-Peters,FB,-0.7590894440434635,retained
+West Ham,Pablo,FW,-0.8025816332584382,retained
+West Ham,Jean-Clair Todibo,CB,-0.839800870986602,retained
+West Ham,Tomáš Souček,DM,-1.4961293787941,retained
+Wolves,Hugo Bueno,FB,0.891537848470661,retained
+Wolves,Rafiki Saïd,,0.8084328477397612,cross_league_estimate
+Wolves,Kieran Trippier,FB,0.7879862982367151,premier_league
+Wolves,Raul Jiménez,FW,0.4038285309395741,premier_league
+Wolves,Emmanuel Agbadou,CB,0.206987579261699,retained
+Wolves,Jean-Ricner Bellegarde,CM,0.1252397448949901,retained
+Wolves,Mateus Mane,AM,-0.0441796185664024,retained
+Wolves,José Sá,GK,-0.1545383837609701,retained
+Wolves,David Møller Wolfe,FB,-0.3495447205334727,retained
+Wolves,Angel Gomes,AM,-0.418356601262866,retained
+Wolves,André,DM,-0.4704716206348573,retained
+Wolves,Sam Johnstone,GK,-0.4904188228792684,retained
+Wolves,Toti Gomes,CB,-0.5400650979028137,retained
+Wolves,Jhon Arias,W,-0.6668437266013576,retained
+Wolves,Marshall Munetsi,CM,-0.7197548743061577,retained
+Wolves,Ladislav Krejčí,CB,-0.7488708301430512,retained
+Wolves,Ladislav Krejcí,CB,-0.8496828213314368,premier_league
+Wolves,Adam Armstrong,FW,-0.9142557031227856,retained
+Wolves,Yerson Mosquera,CB,-0.934348519534732,retained
+Wolves,Hwang Hee-chan,FW,-0.9576244239197784,retained
+Wolves,Santiago Bueno,CB,-1.039200327795529,retained
+Wolves,Jackson Tchatchoua,CM,-1.0554092235790002,retained
+Wolves,Rodrigo Gomes,FB,-1.082915860344681,retained

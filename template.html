@@ -192,6 +192,7 @@
   .player-score-wrap { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
   .player-score { font-size: 14px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
   .player-score-raw { font-size: 10px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+  .projected-inline { border: 1px dashed currentColor; border-radius: 999px; padding: 0 5px; }
   .stint-tag { font-size: 9.5px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 1px 5px; white-space: nowrap; }
 
   /* All-players filter bar */
@@ -323,6 +324,19 @@
   </section>
 
   <section class="block">
+    <div class="block-head"><h2>Live squad ranking</h2></div>
+    <p class="block-note">Every club's squad <b>as it stands today</b> — last season's players, minus this summer's departures, plus this summer's arrivals — ranked by the summed rating of the whole squad. Tap a club for the full roster.</p>
+    <div class="callout"><strong>This is a different question from the season tables below.</strong> Those score the squad that actually played; this scores the squad currently on the books. It sums each player's rating rather than their minutes-weighted contribution, because minute share for a season that hasn't been played is unknown — so <b>squad size drives the total by construction</b>. A deep squad of average players can out-total a small squad of good ones, which is why average-per-player is shown alongside. Arrivals from other leagues carry projected ratings (dashed), so the <b>proj.</b> count shows how much of a total rests on estimate.</div>
+    <div class="club-table-wrap">
+      <table class="clubs" id="liveSquadTable">
+        <thead><tr><th></th><th>Club</th><th title="Sum of every current squad member's rating">Squad total</th><th title="Players on the books above the 450-minute floor, plus this summer's arrivals">Size</th><th title="Squad total divided by rated players — depth-neutral">Avg</th><th title="How many of this squad's ratings are cross-league projections rather than measured Premier League data">Proj.</th></tr></thead>
+        <tbody id="liveSquadBody"></tbody>
+      </table>
+    </div>
+    <p class="scroll-hint">Swipe to see more columns →</p>
+  </section>
+
+  <section class="block">
     <div class="block-head"><h2>Club core quality by season</h2></div>
     <p class="block-note">Every player over the 450-minute floor, z-scored and rolled up per club weighted by minutes share — the <b>full squad</b>, not a top-N slice, so genuine depth counts. Positive delta means the squad that finished this season is, on paper, better than the one that started it — not that the club necessarily earned more points. Pick a season below, then <b>tap any club to see which players joined and left</b>. The <b>Top 14</b> column keeps the older narrower view for reference; it sums fewer players so it sits on a smaller scale — compare it only against other Top 14 figures.</p>
     <div class="tabs" id="seasonTabs"></div>
@@ -429,6 +443,46 @@
   document.getElementById('statStrip').innerHTML = strip.map(s =>
     `<div class="stat-chip"><span class="n">${s.n}</span><span class="l">${s.l}</span></div>`
   ).join('');
+
+  // Live squad ranking: current roster, expandable to the full player list.
+  (function renderLiveSquads(){
+    const rows = data.live_squads || [];
+    if (!rows.length) return;
+    document.getElementById('liveSquadBody').innerHTML = rows.map((c, i) => {
+      const roster = c.players.map(m => {
+        const projected = m.source === 'cross_league_estimate';
+        const rating = m.rating === null || m.rating === undefined
+          ? '<span class="na">unrated</span>'
+          : `<span class="mover-contrib num ${signClass(m.rating)}${projected ? ' projected-inline' : ''}">${projected ? '≈' : ''}${m.rating >= 0 ? '+' : ''}${fmtNum(m.rating)}</span>`;
+        return `<div class="mover">
+          <span class="mover-name">${m.player}${m.sub_position ? ` <span class="mover-pos">${m.sub_position}</span>` : ''}</span>
+          <span class="mover-min">${projected ? 'new, projected' : (m.source === 'premier_league' ? 'new' : '')}</span>
+          ${rating}
+        </div>`;
+      }).join('');
+      return `<tr class="club-row expandable" data-live="${encodeURIComponent(c.club)}">
+        <td class="rank-num"><span class="row-chevron">▸</span>${i + 1}</td>
+        <td class="club-name">${c.club}</td>
+        <td class="num ${signClass(c.total)}">${c.total >= 0 ? '+' : ''}${c.total.toFixed(2)}</td>
+        <td class="num muted">${c.size}</td>
+        <td class="num ${signClass(c.avg)}">${c.avg === null ? '—' : (c.avg >= 0 ? '+' : '') + fmtNum(c.avg)}</td>
+        <td class="num muted">${c.projected || '—'}</td>
+      </tr>
+      <tr class="club-detail-row" data-live-detail="${encodeURIComponent(c.club)}"><td colspan="6">
+        <div class="movers">
+          <p class="movers-note">Current squad, ${c.players.length} players, best-rated first. <b>≈</b> marks a cross-league projection rather than measured Premier League data.</p>
+          <div class="mover-cols"><div class="mover-col">${roster}</div></div>
+        </div>
+      </td></tr>`;
+    }).join('');
+    document.querySelectorAll('#liveSquadBody tr.club-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const d = document.querySelector(`#liveSquadBody tr.club-detail-row[data-live-detail="${row.dataset.live}"]`);
+        if (!d) return;
+        row.classList.toggle('open', d.classList.toggle('open'));
+      });
+    });
+  })();
 
   // Club delta table -- one tab per season transition
   const transitionSeasons = data.transition_seasons || [];

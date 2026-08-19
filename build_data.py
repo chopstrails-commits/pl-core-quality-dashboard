@@ -214,6 +214,38 @@ def build(source: Path) -> dict:
             }
         squad_changes[season_to] = per_club
 
+    # ---- Live squad: who is at each club right now ----
+    # Distinct from the club layer, which scores the squad that actually
+    # played last season. This is last season's players, minus this summer's
+    # departures, plus this summer's arrivals -- see live_squad.py for why it
+    # sums composite scores rather than quality_contribution (minute share for
+    # an unplayed season is unknown) and why squad size drives the total.
+    from pl_predictive_model.live_squad import build_live_squads  # noqa: E402
+
+    live = build_live_squads(data_dir=data_dir)
+    live_players = pd.read_csv(data_dir / "exploratory/live_squad_players.csv")
+    live_rows = []
+    for _, r in live.iterrows():
+        members = live_players[live_players["squad"] == r["club"]].sort_values(
+            "rating", ascending=False, na_position="last"
+        )
+        live_rows.append({
+            "club": r["club"],
+            "total": round(float(r["squad_total"]), 2),
+            "size": int(r["squad_size"]),
+            "avg": None if pd.isna(r["squad_avg"]) else round(float(r["squad_avg"]), 3),
+            "projected": int(r["projected_player_count"]),
+            "players": [
+                {
+                    "player": m["player"],
+                    "sub_position": clean(m.get("sub_position")),
+                    "rating": None if pd.isna(m["rating"]) else round(float(m["rating"]), 2),
+                    "source": m["source"],
+                }
+                for _, m in members.iterrows()
+            ],
+        })
+
     # ---- Clubs: full season history ----
     c = pd.read_csv(data_dir / "club/club_core_quality.csv")
     seasons = sorted(c["season"].unique())
@@ -289,6 +321,7 @@ def build(source: Path) -> dict:
         "clubs": clubs_out,
         "club_transitions": club_transitions,
         "squad_changes": squad_changes,
+        "live_squads": live_rows,
         "transition_seasons": transition_seasons,
         "club_history": {"seasons": seasons, "rows": history_rows},
         "transfers": transfer_summary,
